@@ -20,7 +20,7 @@ public interface InjektRegistrar : InjektRegistry {
         submodule.registerWith(this)
     }
 
-    public final inline fun <reified T: Any> T.registerAsSingleton(singleInstance: T) { addSingleton(singleInstance) }
+    public final inline fun <reified T: Any> T.registerAsSingleton() { addSingleton(this) }
     public final inline fun <reified R> KClass<R>.registerSingletonFactory(@noinline factoryCalledOnce: ()->R) { addSingletonFactory(factoryCalledOnce) }
     public final inline fun <reified R> KClass<R>.registerFactory(@noinline factoryCalledEveryTime: ()->R) { addFactory(factoryCalledEveryTime) }
     public final inline fun <reified R> KClass<R>.registerPerThreadFactory(@noinline factoryCalledOncePerThread: ()->R) { addPerThreadFactory(factoryCalledOncePerThread) }
