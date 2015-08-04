@@ -16,7 +16,7 @@ class MockLogger(name: String?, clazz: Class<*>?) {
 }
 
 class TestInjektion {
-    companion object : InjektModule() {
+    companion object : InjektMain() {
         // platformStatic public fun main(args: Array<String>) {
             // the Injekt module goes on something that you know will be instantiated first, say the companion object of where you put
             // your static main.  Or the first class it creates.
@@ -24,8 +24,8 @@ class TestInjektion {
 
         override fun InjektRegistrar.registerInjektables() {
             // import other prepackaged injecktions
-            importInjektables(OtherModuleWithPrepackagedInjektions)
-            importInjektables(ExtraModuleWithInjektions)
+            importModule(OtherModuleWithPrepackagedInjektions)
+            importModule(ExtraModuleWithInjektions)
 
             // factory for one instance per thread
             addPerThreadFactory { NotThreadSafeConnection(Thread.currentThread().toString()) }
@@ -140,8 +140,8 @@ data class DescendantThing(name: String): AncestorThing(name)
 // === code can make common things ready for injection in the best way possible, if these were other modules or packages
 //     they have defined some importable injections:
 
-object OtherModuleWithPrepackagedInjektions: Injektables {
-    override fun InjektRegistrar.import() {
+object OtherModuleWithPrepackagedInjektions: InjektModule {
+    override fun InjektRegistrar.exportInjektables() {
         // lazy factory for singleton
         addSingletonFactory { SomethingSingleton("Hi, I'm single") }
     }
@@ -151,8 +151,8 @@ data class SomethingSingleton(val name: String)
 
 // === and more...
 
-object ExtraModuleWithInjektions : Injektables {
-    override fun InjektRegistrar.import() {
+object ExtraModuleWithInjektions : InjektModule {
+    override fun InjektRegistrar.exportInjektables() {
         // factory for new instance per use
         addFactory { ManyMultiples() }
     }

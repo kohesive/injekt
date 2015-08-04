@@ -4,7 +4,7 @@ package uy.kohesive.injekt
 /**
  *  A module that registers and uses singletons/object factories
  */
-public abstract class InjektModule() : InjektRegistrar {
+public abstract class InjektMain() : InjektRegistrar {
     abstract fun InjektRegistrar.registerInjektables()
 
     init {
@@ -15,10 +15,10 @@ public abstract class InjektModule() : InjektRegistrar {
 /**
  * A package of injectable items that can be included intoa  module
  */
-public interface Injektables {
+public interface InjektModule {
     internal fun registerWith(intoModule: InjektRegistrar) {
-        intoModule.import()
+        intoModule.exportInjektables()
     }
 
-    fun InjektRegistrar.import()
+    abstract fun InjektRegistrar.exportInjektables()
 }

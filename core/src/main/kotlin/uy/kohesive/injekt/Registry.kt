@@ -16,7 +16,7 @@ public interface InjektRegistry {
 }
 
 public interface InjektRegistrar : InjektRegistry {
-    fun importInjektables(submodule: Injektables) {
+    fun importModule(submodule: InjektModule) {
         submodule.registerWith(this)
     }
 
