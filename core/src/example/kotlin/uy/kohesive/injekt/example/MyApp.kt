@@ -7,7 +7,7 @@ import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 
 class MyApp {
-    companion object : InjektModule() {
+    companion object : InjektMain() {
         // my app starts here with a static main()
         platformStatic public fun main(args: Array<String>) {
             MyApp().run()
@@ -39,6 +39,9 @@ class MyApp {
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
             addPerKeyFactory { petName: String -> pets.get(petName) }
+
+            // use prebuilt Injektable packages
+            importModule(AmazonS3InjektModule)
         }
     }
 

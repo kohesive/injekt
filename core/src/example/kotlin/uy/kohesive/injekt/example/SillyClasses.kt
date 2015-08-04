@@ -5,7 +5,7 @@ package uy.kohesive.injekt.example
 data class HttpServerConfig(val host: String, val port: Int, val workerThreads: Int)
 data class HttpContext(val params: Map<String, String> = emptyMap())
 data class HttpServer(val host: String, val port: Int) {
-    public fun withThreads(threadCount: Int): HttpServer  {}
+    public fun withThreads(threadCount: Int): HttpServer  { return this }
     public fun handleRequest(handle: (context: HttpContext)->Unit) { }
 }
 
