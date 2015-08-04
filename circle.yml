@@ -1,4 +1,11 @@
-checkout:
+machine:
+  java:
+    version: oraclejdk7
+
+test:
   post:
-    - git submodule init 
-    - git submodule update
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - ./gradlew jars
+    - mkdir -p $CIRCLE_ARTIFACTS/libs/
+    - find . -type f -regex ".*/build/libs/.*jar" -exec cp {} $CIRCLE_ARTIFACTS/libs/ \;

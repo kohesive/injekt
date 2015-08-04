@@ -1,3 +1,5 @@
 rootProject.name = "injekt"
 
 include 'core'
+
+project(':core').name = 'injekt-core'

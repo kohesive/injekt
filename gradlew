@@ -2,19 +2,9 @@
 
 ##############################################################################
 ##
-##  CUSTOMIZED TO USE AN INIT SCRIPT FOR KOHESIVE
-##
 ##  Gradle start up script for UN*X
 ##
 ##############################################################################
-
-
-if [ ! -f kohesive-build/bootstrap.gradle ]; then
-  echo "Missing kohesive-build/bootstrap.gradle file. Git pull must include submodules, see https://github.com/kohesive/kohesive-build"
-  echo
-  exit 1
-fi
- 
 
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 DEFAULT_JVM_OPTS=""
@@ -171,4 +161,4 @@ function splitJvmOpts() {
 eval splitJvmOpts $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS
 JVM_OPTS[${#JVM_OPTS[*]}]="-Dorg.gradle.appname=$APP_BASE_NAME"
 
-exec "$JAVACMD" "${JVM_OPTS[@]}" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain -I kohesive-build/bootstrap.gradle "$@"
+exec "$JAVACMD" "${JVM_OPTS[@]}" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
