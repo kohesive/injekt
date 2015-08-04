@@ -19,7 +19,7 @@ compile "uy.kohesive.injekt:injekt-core:1.0.0"
 
 At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the InjektModule on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/core/src/example/kotlin/uy/kohesive/injekt/example/MyApp.kt))
 
-```
+```kotlin
 class MyApp {
     companion object : InjektModule() {
         // my app starts here with a static main()
@@ -62,7 +62,7 @@ class MyApp {
 
 And once they are registered, anything else in the system can access them, for example as class properties they can be injekted using delegates:
 
-```
+```kotlin
     val log: Logger by Delegates.injektLogger()
     val laziest: LazyDazy by Delegates.injektLazy()
     val lessLazy: LazyDazy by Delegates.injektValue()
@@ -70,20 +70,20 @@ And once they are registered, anything else in the system can access them, for e
 
 or directly as assignments both as property declarations and local assignemtns:
 
-```
+```kotlin
     val notLazy1: LazyDazy = Injekt.get()
     val notLazy2 = Injekt.get<LazyDazy>()
 ```
 
 And they can be used in constructors and methods as default parameters:
 
-```
+```kotlin
     public fun foo(dbConnectParms: DatabaseConfig = Injekt.get()) { ... }
 ```
 
 And since we have registered in the first example a mix of types, including thread specific injektions and key/parameter based, here they are in action:
 
-```
+```kotlin
  public fun run() {
         // even local variables can be injekted, or rather "got"
         val something = Injekt.get<DontCreateUntilWeNeedYa>()
