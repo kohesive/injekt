@@ -134,6 +134,10 @@ Note:  if you extend `InjektMain` you can also implement `InjektModule` interfac
 importInjektables(this)
 ```
 
+## Coming soon... (RoadMap)
+
+* Konfiguration loading, binding and injektion as a separate module.
+* Tell me what you would like to see, add Issues here in Github with requests.
 
 
 
