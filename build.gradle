@@ -11,7 +11,7 @@ buildscript {
     }
     //noinspection GroovyAssignabilityCheck
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:0.12.1218"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         classpath "com.prezi.pride:gradle-pride-plugin:0.11"
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
@@ -128,11 +128,11 @@ subprojects {
                 }
             }
         }
+
     }
 
     nexus {
-        sign = false
-        repositoryUrl = "file://${buildDir.canonicalPath}/repo"
+        sign = true
     }
 }
 
@@ -147,5 +147,6 @@ task jars() {
 task release() {
     dependsOn subprojects.subRelease
 }
+
 
 defaultTasks 'clean', 'jars'
