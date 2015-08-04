@@ -21,7 +21,7 @@ At the earliest point in your application startup, you register singletons, fact
 
 ```kotlin
 class MyApp {
-    companion object : InjektModule() {
+    companion object : InjektMain() {
         // my app starts here with a static main()
         platformStatic public fun main(args: Array<String>) {
             MyApp().run()
@@ -53,6 +53,9 @@ class MyApp {
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
             addPerKeyFactory { petName: String -> pets.get(petName) }
+
+            // use prebuilt Injektable packages
+            importModule(AmazonS3InjektModule)
         }
     }
 
@@ -105,5 +108,33 @@ And since we have registered in the first example a mix of types, including thre
         }
     }
 ```
+
+## Packaged Injektables
+
+Now that you have mastered Injektions, let's make modules of our application provide their own injektables.  Say our Amazon AWS helper module has a properly configured credential provider chain, and can make clients for us nicely.  It is best to have that module decide the construction and make it available to other modules.  And it's easy.  Create an object that extends `InjektModule` and then it is pretty much the same as before:
+
+```kotlin
+public object AmazonS3InjektModule : InjektModule {
+    override fun InjektRegistrar.exportInjektables() {
+        addSingletonFactory { AmazonS3Client(defaultCredentialsProviderChain()) }
+    }
+}
+```
+
+The only difference between an `InjektMain` and `InjektModule` object is that a `InjektMain` is automatically called to initalize, whereas an `InjektModule` does not do anything until it is imported by another `InjektMain` or `InjektModule`.  Using `InjektModule` is simple, go back to the first example at the top of this page and you will see it imported with a simple
+
+```kotlin
+ // use prebuilt Injektable packages
+importModule(AmazonS3InjektModule)
+```
+
+Note:  if you extend `InjektMain` you can also implement `InjektModule` interface and be both at the same time.  When doing this, put common Injektables into the module `exportInjektables()` method and import it during the main `registerInjektables()` method with simple:
+
+```kotlin
+importInjektables(this)
+```
+
+
+
 
 
