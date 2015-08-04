@@ -1,5 +1,6 @@
 [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](#) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/mplatvoet/kovenant/blob/master/LICENSE)
 
+*(deploymnet note:  Maven repo publishing is in progress, should appear soon)*
 
 # Injekt
 
@@ -9,7 +10,7 @@ Injekt is NOT inversion of control.  It is NOT some mystical class file manipula
 
 ## Maven Dependnecy
 
-First, include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`:
+First, include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
 
 ```
 compile "uy.kohesive.injekt:injekt-core:1.0.0"
