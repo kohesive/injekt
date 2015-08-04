@@ -60,6 +60,8 @@ subprojects {
         provided "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
 
         testCompile "junit:junit:$version_junit"
+        testCompile "org.slf4j:slf4j-api:$version_slf4j"
+        testRuntime "ch.qos.logback:logback-classic:$version_logback"
     }
 
     //noinspection GroovyAssignabilityCheck
