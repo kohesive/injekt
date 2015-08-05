@@ -64,7 +64,7 @@ class MyApp {
 }
 ```
 
-And once they are registered, anything else in the system can access them, for example as class properties they can be injekted using delegates:
+And once they are registered, anything else in the system can access them, for example as class properties they can be injekted using delegates (you should `import uy.kohesion.injekt.*` to get all delegates):
 
 ```kotlin
     val log: Logger by Delegates.injektLogger()
