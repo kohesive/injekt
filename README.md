@@ -10,9 +10,20 @@ Injekt is NOT inversion of control.  It is NOT some mystical class file manipula
 
 First, include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
 
+**Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.0.0"
+compile "uy.kohesive.injekt:injekt-core:1.0.+"
 ```
+
+**Maven:**
+```
+<dependency>
+    <groupId>uy.kohesive.injekt</groupId>
+    <artifactId>injekt-core</artifactId>
+    <version>[1.0.0,1.1.0)</version>
+</dependency>
+```
+
 
 *(deploy note:  Maven repo publishing is in progress, should appear soon)*
 
