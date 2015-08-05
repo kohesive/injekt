@@ -1,6 +1,6 @@
 [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](#) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE)
 
-# Injekt
+# Injekt 
 
 Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
 
@@ -139,6 +139,11 @@ importInjektables(this)
 
 * Konfiguration loading, binding and injektion as a separate module.
 * Tell me what you would like to see, add Issues here in Github with requests.
+* 
+
+## With help from...
+
+[![Collokia Logo](https://www.collokia.com/images/collokia-logo-210x75.png)](https://www.collokia.com)
 
 
 
