@@ -2,6 +2,8 @@
 
 # Injekt 
 
+[![Join the chat at https://gitter.im/kohesive/injekt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kohesive/injekt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
 
 Injekt is NOT inversion of control.  It is NOT some mystical class file manipulator.  It is NOT complex.  But it IS powerful.
