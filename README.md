@@ -148,7 +148,7 @@ importInjektables(this)
 
 ## One Instance Per-Thread Factories -- a tip
 
-When using a factory that is per-thread (one instance of each object is generated per thread), it is important that you consider how the instance is used.  If you generate it near the start of processing on a thread avoid passing the object to be used on a different thread if you truly want to isolate the instances by thread.  Currently, the default registry has lock contention across threads for these per-thread factories, so asking too often will cause possible thread contention.  But, when #2 is resolved, thread local storage will be used making it very fast to grab the instance any time you need it rather than holding onto the instance for a long duration.  Until then, watch how you uses these.
+When using a factory that is per-thread (one instance of each object is generated per thread), it is important that you consider how the instance is used.  If you generate it near the start of processing on a thread avoid passing the object to be used on a different thread if you truly want to isolate the instances by thread.  Currently, the default registry has lock contention across threads for these per-thread factories, so asking too often will cause possible thread contention.  But, when [issue #2](https://github.com/kohesive/injekt/issues/2) is resolved, thread local storage will be used making it very fast to grab the instance any time you need it rather than holding onto the instance for a long duration.  Until then, watch how you uses these.
 
 ## Coming soon... (RoadMap)
 
