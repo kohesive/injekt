@@ -139,7 +139,12 @@ importInjektables(this)
 
 * Konfiguration loading, binding and injektion as a separate module.
 * Tell me what you would like to see, add Issues here in Github with requests.
-* 
+
+## Recommneded libraries:
+
+Other libraries that we recommend a building blocks for Kotlin applications:
+
+* [Kovenant](http://kovenant.komponents.nl) - promises for Kotlin, easy, fun, and async! (JVM / Android)
 
 ## With help from...
 
