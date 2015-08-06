@@ -20,6 +20,6 @@ class SmallApp {
     }
 
     public fun run(dateFormatter: SimpleDateFormat = Injekt.get()) {
-        System.out.println("I survived the date formatting!!! ${dateFormatter.format(Date())})
+        System.out.println("I survived the date formatting!!! ${dateFormatter.format(Date())}")
     }
 }
