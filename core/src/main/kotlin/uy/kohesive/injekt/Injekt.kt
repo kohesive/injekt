@@ -81,14 +81,6 @@ public object Injekt: InjektRegistrar, InjektRegistry {
     public inline fun <reified T> logger(byObject: Any): T = registry.getLogger(javaClass<T>(),byObject.javaClass)
 }
 
-public inline fun <reified T> Delegates.injektLazy(): ReadOnlyProperty<Any?, T>  = Injekt.Property.lazy()
-public inline fun <reified T> Delegates.injektValue(): ReadOnlyProperty<Any?, T> = Injekt.Property.value()
-public inline fun <reified T> Delegates.injektLazy(key: Any): ReadOnlyProperty<Any?, T> = Injekt.Property.lazy(key)
-public inline fun <reified T> Delegates.injektValue(key: Any): ReadOnlyProperty<Any?, T> = Injekt.Property.value(key)
-public inline fun <reified R, reified T> Delegates.injektLogger(): ReadOnlyProperty<R, T> = Injekt.Property.logger()
-public inline fun <reified R, reified T> Delegates.injektLogger(byClass: Class<*>): ReadOnlyProperty<R, T> = Injekt.Property.logger(byClass)
-public inline fun <reified R, reified T> Delegates.injektLogger(byName: String): ReadOnlyProperty<R, T> = Injekt.Property.logger(byName)
-
 public interface InjektInstanceFactory : InjektRegistry {
     public fun <R> getInstance(forClass: Class<R>): R
     public fun <R,K> getKeyedInstance(forClass: Class<R>, key: K): R

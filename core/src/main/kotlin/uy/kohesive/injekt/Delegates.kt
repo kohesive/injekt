@@ -1,7 +1,16 @@
 package uy.kohesive.injekt
 
 import kotlin.properties
+import kotlin.properties.Delegates
 import kotlin.properties.ReadOnlyProperty
+
+public inline fun <reified T> Delegates.injektLazy(): ReadOnlyProperty<Any?, T>  = Injekt.Property.lazy()
+public inline fun <reified T> Delegates.injektValue(): ReadOnlyProperty<Any?, T> = Injekt.Property.value()
+public inline fun <reified T> Delegates.injektLazy(key: Any): ReadOnlyProperty<Any?, T> = Injekt.Property.lazy(key)
+public inline fun <reified T> Delegates.injektValue(key: Any): ReadOnlyProperty<Any?, T> = Injekt.Property.value(key)
+public inline fun <reified R, reified T> Delegates.injektLogger(): ReadOnlyProperty<R, T> = Injekt.Property.logger()
+public inline fun <reified R, reified T> Delegates.injektLogger(byClass: Class<*>): ReadOnlyProperty<R, T> = Injekt.Property.logger(byClass)
+public inline fun <reified R, reified T> Delegates.injektLogger(byName: String): ReadOnlyProperty<R, T> = Injekt.Property.logger(byName)
 
 // based on code from Kotlin Delegates class
 

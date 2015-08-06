@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentMap
  */
 
 internal fun <K, V> ConcurrentMap<K, V>.computeIfAbsentUnsafe(key: K, factory: ()->V): V {
-    // TODO: this is not perfectly safe in that the factory could be called when another thread beats us to the contruction.
+    // TODO: this is not perfectly safe in that the factory could be called when another thread beats us to the construction.
     //       JDK 8 has a real version of ConcurrentMap.computeIfAbsent
     var answer = this.get(key)
     if (answer == null) {
@@ -21,6 +21,12 @@ internal fun <K, V> ConcurrentMap<K, V>.computeIfAbsentUnsafe(key: K, factory: (
     return answer
 }
 
+
+/**
+ * Default implementation of registry that uses ConcurrentHashMaps which have zero or few locks during reads, and work well
+ * in a write little, read many model.  Which is exactly our model.  This stores the factories and the resulting instances
+ * for cases that keep them around (Singletons, Per Key instances, Per Thread instances)
+ */
 public object DefaultInjektRegistry : InjektInstanceFactory {
     private enum class FactoryType { SINGLETON, MULTI, MULTIKEYED, THREAD, THREADKEYED }
 
@@ -31,6 +37,7 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
     private val existingValues = ConcurrentHashMap<Instance, Any>()
     private val factories = ConcurrentHashMap<Class<*>, ()->Any>()
     private val keyedFactories = ConcurrentHashMap<Class<*>, (Any)->Any>()
+    private val threadLocals = ConcurrentHashMap<Class<*>,>
 
     data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String)->Any, val classFactory: (Class<*>)->Any)
     private volatile var loggerFactory: LoggerInfo? = null
