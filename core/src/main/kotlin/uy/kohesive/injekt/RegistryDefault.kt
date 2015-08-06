@@ -7,18 +7,16 @@ import java.util.concurrent.ConcurrentMap
  * The registry of singletons and factories used by Injekt.  Default implementation may not be overly efficient
  */
 
-internal fun <K, V> ConcurrentMap<K, V>.computeIfAbsentUnsafe(key: K, factory: ()->V): V {
-    // TODO: this is not perfectly safe in that the factory could be called when another thread beats us to the construction.
+public fun <K, V> ConcurrentMap<K, V>.concurrentGetOrPutSlightlyUnsafe(key: K, defaultValue: () -> V): V {
+    // TODO: this is not perfect, the factory could be called more than once if two threads compete to initialize a value
     //       JDK 8 has a real version of ConcurrentMap.computeIfAbsent
-    var answer = this.get(key)
-    if (answer == null) {
-        answer = factory()
-        var temp = this.putIfAbsent(key, answer!!)
-        if (temp != null) {
-            answer = temp
-        }
+
+    var localValue:V = null
+    fun invokeAndStore () : V  {
+        localValue = defaultValue()
+        return localValue
     }
-    return answer
+    return putIfAbsent(key, invokeAndStore()) ?: localValue
 }
 
 
@@ -37,7 +35,6 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
     private val existingValues = ConcurrentHashMap<Instance, Any>()
     private val factories = ConcurrentHashMap<Class<*>, ()->Any>()
     private val keyedFactories = ConcurrentHashMap<Class<*>, (Any)->Any>()
-    private val threadLocals = ConcurrentHashMap<Class<*>,>
 
     data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String)->Any, val classFactory: (Class<*>)->Any)
     private volatile var loggerFactory: LoggerInfo? = null
@@ -69,7 +66,7 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
     }
 
     override fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: ()->R)     {
-        factories.put(forClass, { existingValues.computeIfAbsentUnsafe(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
+        factories.put(forClass, { existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
     }
 
     override fun <R> addFactory(forClass: Class<R>, factoryCalledEveryTime: ()->R)    {
@@ -78,21 +75,21 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
 
     override fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: ()->R)   {
         factories.put(forClass, {
-            existingValues.computeIfAbsentUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
+            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
         })
     }
 
     @suppress("UNCHECKED_CAST")
     override fun <R, K> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKey: (K)->R)       {
         keyedFactories.put(forClass, {
-            key -> existingValues.computeIfAbsentUnsafe(Instance(forClass,key), { factoryCalledPerKey(key as K) })
+            key -> existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass,key), { factoryCalledPerKey(key as K) })
         })
     }
 
     @suppress("UNCHECKED_CAST")
     override fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K)->R) {
         keyedFactories.put(forClass, {
-            key -> existingValues.computeIfAbsentUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
+            key -> existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
         })
     }
 
