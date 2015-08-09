@@ -1,5 +1,6 @@
 rootProject.name = "injekt"
 
-include 'core'
+include 'api', 'core'
 
+project(':api').name = 'injekt-api'
 project(':core').name = 'injekt-core'

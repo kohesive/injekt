@@ -22,7 +22,7 @@ class TestInjektion {
             // your static main.  Or the first class it creates.
         // }
 
-        override fun InjektRegistrar.registerInjektables() {
+        override fun InjektRegistrar.registerInjectables() {
             // import other prepackaged injecktions
             importModule(OtherModuleWithPrepackagedInjektions)
             importModule(ExtraModuleWithInjektions)
@@ -42,14 +42,14 @@ class TestInjektion {
     }
 
     // now we can inject using delegation in any class
-    val swm: SomethingSingleton by Delegates.injektValue()  // inject at instantiation
-    val many: ManyMultiples by Delegates.injektLazy() // inject when accessed
-    val many2: ManyMultiples by Delegates.injektLazy()
-    val worker: NotLazy by Delegates.injektLazy()
+    val swm: SomethingSingleton by Delegates.injectValue()  // inject at instantiation
+    val many: ManyMultiples by Delegates.injectLazy() // inject when accessed
+    val many2: ManyMultiples by Delegates.injectLazy()
+    val worker: NotLazy by Delegates.injectLazy()
 
-    val LOG: MockLogger by Delegates.injektLogger()
-    val LOG_BYNAME: MockLogger by Delegates.injektLogger("testy")
-    val LOG_BYCLASS: MockLogger by Delegates.injektLogger(javaClass<TestInjektion>())
+    val LOG: MockLogger by Delegates.injectLogger()
+    val LOG_BYNAME: MockLogger by Delegates.injectLogger("testy")
+    val LOG_BYCLASS: MockLogger by Delegates.injectLogger(javaClass<TestInjektion>())
 
     @Test public fun testInjectedMembers() {
         assertEquals("Hi, I'm single", swm.name)
@@ -95,7 +95,7 @@ class TestInjektion {
     @Test public fun testNestedInjection() {
         @data class ConstructedInFactory(val mySingleItem: SomethingSingleton)
 
-        Companion.addSingletonFactory {  ConstructedInFactory(Injekt.get<SomethingSingleton>()) }
+        Companion.scope.addSingletonFactory {  ConstructedInFactory(Injekt.get<SomethingSingleton>()) }
 
         assertEquals("Hi, I'm single", Injekt.get<ConstructedInFactory>().mySingleItem.name)
     }
@@ -118,7 +118,7 @@ class TestInjektion {
     }
 
     @Test public fun testKeyedInjection() {
-        Companion.addPerKeyFactory(javaClass<KeyedThing>(), javaClass<String>(), { key -> KeyedThing("$key - ${System.currentTimeMillis()}") })
+        Companion.scope.addPerKeyFactory(javaClass<KeyedThing>(), javaClass<String>(), { key -> KeyedThing("$key - ${System.currentTimeMillis()}") })
         val one = Injekt.get<KeyedThing>("one")
         val two = Injekt.get<KeyedThing>("two")
         assertNotEquals(one,two)
@@ -141,7 +141,7 @@ data class DescendantThing(name: String): AncestorThing(name)
 //     they have defined some importable injections:
 
 object OtherModuleWithPrepackagedInjektions: InjektModule {
-    override fun InjektRegistrar.exportInjektables() {
+    override fun InjektRegistrar.registerInjectables() {
         // lazy factory for singleton
         addSingletonFactory { SomethingSingleton("Hi, I'm single") }
     }
@@ -152,7 +152,7 @@ data class SomethingSingleton(val name: String)
 // === and more...
 
 object ExtraModuleWithInjektions : InjektModule {
-    override fun InjektRegistrar.exportInjektables() {
+    override fun InjektRegistrar.registerInjectables() {
         // factory for new instance per use
         addFactory { ManyMultiples() }
     }
