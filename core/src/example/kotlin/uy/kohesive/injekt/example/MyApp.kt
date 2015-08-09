@@ -15,7 +15,7 @@ class MyApp {
 
         // the InjektModule() will call me back here on a method I override.  And all my functions for registration are
         // easy to find on the receiver class
-        override fun InjektRegistrar.registerInjektables() {
+        override fun InjektRegistrar.registerInjectables() {
             // let's setup my logger first
             addLoggerFactory<Logger>({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
 
@@ -27,9 +27,9 @@ class MyApp {
             addSingletonFactory { DontCreateUntilWeNeedYa() }
 
             // or lets only have one database connection per thread, basically a singleton per thread
-            addPerThreadFactory { JdbcDatabaseConnection(Injekt.get()) }  // wow, nested injektions!!!
+            addPerThreadFactory { JdbcDatabaseConnection(Injekt.get()) }  // wow, nested inections!!!
 
-            // or give me a new one each time it is injekted
+            // or give me a new one each time it is injected
             addFactory { LazyDazy() }
 
             // or be weird and use extension functions on classes that are visible while in this lambda
@@ -40,20 +40,20 @@ class MyApp {
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
             addPerKeyFactory { petName: String -> pets.get(petName) }
 
-            // use prebuilt Injektable packages
+            // use prebuilt injectable packages
             importModule(AmazonS3InjektModule)
         }
     }
 
     // === Ok, now let's use these factories ===
 
-    // Injektions to properties can be delegates, we've added a bunch of extensions for inject now, lazy, and more
-    val log: Logger by Delegates.injektLogger()
-    val laziest: LazyDazy by Delegates.injektLazy()
-    val lessLazy: LazyDazy by Delegates.injektValue()
+    // injections to properties can be delegates, we've added a bunch of extensions for inject now, lazy, and more
+    val log: Logger by Delegates.injectLogger()
+    val laziest: LazyDazy by Delegates.injectLazy()
+    val lessLazy: LazyDazy by Delegates.injectValue()
 
     public fun run() {
-        // even local variables can be injekted, or rather "got"
+        // even local variables can be injected, or rather "got"
         val something = Injekt.get<DontCreateUntilWeNeedYa>()
         startHttpServer()
     }
@@ -65,7 +65,7 @@ class MyApp {
             val db: JdbcDatabaseConnection = Injekt.get()    // we have a connection per thread now!
 
             if (context.params.containsKey("pet")) {
-                // injekt from a factory that requires a key / parameter
+                // inject from a factory that requires a key / parameter
                 val pet: NamedPet = Injekt.get(context.params.get("pet")!!)
                 // or other form without reified parameters
                 val pet2 = Injekt.get<NamedPet>(context.params.get("pet")!!)

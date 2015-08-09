@@ -14,7 +14,7 @@ class SmallApp {
             SmallApp().run()
         }
 
-        override fun InjektRegistrar.registerInjektables() {
+        override fun InjektRegistrar.registerInjectables() {
             addPerThreadFactory { SimpleDateFormat("yyyy-MM-dd") }
         }
     }

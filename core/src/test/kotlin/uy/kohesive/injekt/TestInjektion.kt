@@ -23,7 +23,7 @@ class TestInjektion {
         // }
 
         override fun InjektRegistrar.registerInjectables() {
-            // import other prepackaged injecktions
+            // import other prepackaged injections
             importModule(OtherModuleWithPrepackagedInjektions)
             importModule(ExtraModuleWithInjektions)
 
