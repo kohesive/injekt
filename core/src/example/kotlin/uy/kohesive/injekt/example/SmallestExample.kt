@@ -14,12 +14,12 @@ class SmallApp {
             SmallApp().run()
         }
 
-        override fun InjektRegistrar.registerInjektables() {
+        override fun InjektRegistrar.registerInjectables() {
             addPerThreadFactory { SimpleDateFormat("yyyy-MM-dd") }
         }
     }
 
     public fun run(dateFormatter: SimpleDateFormat = Injekt.get()) {
-        System.out.println("I survived the date formatting!!! ${dateFormatter.format(Date())})
+        System.out.println("I survived the date formatting!!! ${dateFormatter.format(Date())}")
     }
 }

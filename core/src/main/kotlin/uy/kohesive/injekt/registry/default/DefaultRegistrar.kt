@@ -1,41 +1,32 @@
-package uy.kohesive.injekt
+package uy.kohesive.injekt.registry.default
 
+import uy.kohesive.injekt.InjektRegistrar
+import uy.kohesive.injekt.InjektionException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 /**
- * The registry of singletons and factories used by Injekt.  Default implementation may not be overly efficient
+ * Default implementation of registry that uses ConcurrentHashMaps which have zero or few locks during reads, and work well
+ * in a write little, read many model.  Which is exactly our model.  This stores the factories and the resulting instances
+ * for cases that keep them around (Singletons, Per Key instances, Per Thread instances)
  */
-
-internal fun <K, V> ConcurrentMap<K, V>.computeIfAbsentUnsafe(key: K, factory: ()->V): V {
-    // TODO: this is not perfectly safe in that the factory could be called when another thread beats us to the contruction.
-    //       JDK 8 has a real version of ConcurrentMap.computeIfAbsent
-    var answer = this.get(key)
-    if (answer == null) {
-        answer = factory()
-        var temp = this.putIfAbsent(key, answer!!)
-        if (temp != null) {
-            answer = temp
-        }
-    }
-    return answer
-}
-
-public object DefaultInjektRegistry : InjektInstanceFactory {
+public open class DefaultRegistrar : InjektRegistrar {
     private enum class FactoryType { SINGLETON, MULTI, MULTIKEYED, THREAD, THREADKEYED }
 
     private val NOKEY = object {}
+
     data class Instance(val forWhatClass: Class<*>, val forKey: Any)
     data class ThreadKey(val forThread: Thread, val forKey: Any)
 
     private val existingValues = ConcurrentHashMap<Instance, Any>()
-    private val factories = ConcurrentHashMap<Class<*>, ()->Any>()
-    private val keyedFactories = ConcurrentHashMap<Class<*>, (Any)->Any>()
+    private val factories = ConcurrentHashMap<Class<*>, () -> Any>()
+    private val keyedFactories = ConcurrentHashMap<Class<*>, (Any) -> Any>()
 
-    data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String)->Any, val classFactory: (Class<*>)->Any)
+    data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String) -> Any, val classFactory: (Class<*>) -> Any)
+
     private volatile var loggerFactory: LoggerInfo? = null
 
-    override fun <T> hasFactory(forClass: Class<T>): Boolean  {
+    override fun <T> hasFactory(forClass: Class<T>): Boolean {
         return factories.get(forClass) != null || keyedFactories.get(forClass) != null
     }
 
@@ -56,40 +47,42 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
         }
     }
 
-    override fun <T: Any> addSingleton(forClass: Class<T>, singleInstance: T)   {
+    override fun <T : Any> addSingleton(forClass: Class<T>, singleInstance: T) {
         addSingletonFactory(forClass, { singleInstance })
         getInstance(forClass)
     }
 
-    override fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: ()->R)     {
-        factories.put(forClass, { existingValues.computeIfAbsentUnsafe(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
+    override fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: () -> R) {
+        factories.put(forClass, { existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
     }
 
-    override fun <R> addFactory(forClass: Class<R>, factoryCalledEveryTime: ()->R)    {
+    override fun <R> addFactory(forClass: Class<R>, factoryCalledEveryTime: () -> R) {
         factories.put(forClass, factoryCalledEveryTime)
     }
 
-    override fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: ()->R)   {
+    override fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: () -> R) {
         factories.put(forClass, {
-            existingValues.computeIfAbsentUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
+            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
         })
     }
 
     @suppress("UNCHECKED_CAST")
-    override fun <R, K> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKey: (K)->R)       {
+    override fun <R, K> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKey: (K) -> R) {
         keyedFactories.put(forClass, {
-            key -> existingValues.computeIfAbsentUnsafe(Instance(forClass,key), { factoryCalledPerKey(key as K) })
+            key ->
+            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, key), { factoryCalledPerKey(key as K) })
         })
     }
 
     @suppress("UNCHECKED_CAST")
-    override fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K)->R) {
+    override fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K) -> R) {
         keyedFactories.put(forClass, {
-            key -> existingValues.computeIfAbsentUnsafe(Instance(forClass,ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
+            key ->
+            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
         })
     }
 
-    override fun <R: Any> addLoggerFactory(forLoggerClass: Class<R>, factoryByName: (String)->R, factoryByClass: (Class<*>)->R) {
+    override fun <R : Any> addLoggerFactory(forLoggerClass: Class<R>, factoryByName: (String) -> R, factoryByClass: (Class<*>) -> R) {
         loggerFactory = LoggerInfo(forLoggerClass, factoryByName, factoryByClass)
     }
 
@@ -100,8 +93,8 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
     }
 
     @suppress("UNCHECKED_CAST")
-    override fun <R,K> getKeyedInstance(forClass: Class<R>, key: K): R {
-        val factory = keyedFactories.get(forClass) ?:  throw InjektionException("No registered keyed factory for class ${forClass.getName()}")
+    override fun <R, K> getKeyedInstance(forClass: Class<R>, key: K): R {
+        val factory = keyedFactories.get(forClass) ?: throw InjektionException("No registered keyed factory for class ${forClass.getName()}")
         return factory.invoke(key) as R
     }
 
@@ -114,16 +107,28 @@ public object DefaultInjektRegistry : InjektInstanceFactory {
     }
 
     @suppress("UNCHECKED_CAST")
-    override fun <R> getLogger(expectedLoggerClass: Class<R>, name: String): R  {
+    override fun <R> getLogger(expectedLoggerClass: Class<R>, name: String): R {
         assertLogger(expectedLoggerClass)
         return loggerFactory!!.nameFactory(name) as R   // if casting to wrong type, let it die with casting exception
     }
 
     @suppress("UNCHECKED_CAST")
-    override fun <R> getLogger(expectedLoggerClass: Class<R>, forClass: Class<*>): R   {
+    override fun <R> getLogger(expectedLoggerClass: Class<R>, forClass: Class<*>): R {
         assertLogger(expectedLoggerClass)
         return loggerFactory!!.classFactory(forClass) as R  // if casting to wrong type, let it die with casting exception
     }
 
 
+}
+
+public fun <K, V> ConcurrentMap<K, V>.concurrentGetOrPutSlightlyUnsafe(key: K, defaultValue: () -> V): V {
+    // TODO: this is not perfect, the factory could be called more than once if two threads compete to initialize a value
+    //       JDK 8 has a real version of ConcurrentMap.computeIfAbsent
+
+    var localValue: V = null
+    fun invokeAndStore(): V {
+        localValue = defaultValue()
+        return localValue
+    }
+    return putIfAbsent(key, invokeAndStore()) ?: localValue
 }
