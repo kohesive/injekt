@@ -1,3 +1,9 @@
+2015-08-11 v1.1.1
+
+Fix for #7 - factories called again when value already existed, even though correct value was returned.  Fixed, although in JDK 7 concurrentHashMap doesn't have a way to prevent some chance of a second factory call, although the correct value would still be returned and the additional factory call would be tossed away.
+
+=====
+
 2015-08-10 v1.1.0
 
 Seperate API from core JAR.  Core depends on API. a lot of small changes to structure for having independent scopes for injection, and cleaning.
