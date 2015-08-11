@@ -53,7 +53,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     }
 
     override fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: () -> R) {
-        factories.put(forClass, { existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
+        factories.put(forClass, { existingValues.concurrentGetOrPutProxy(Instance(forClass, NOKEY), { factoryCalledOnce() }) })
     }
 
     override fun <R> addFactory(forClass: Class<R>, factoryCalledEveryTime: () -> R) {
@@ -62,7 +62,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     override fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: () -> R) {
         factories.put(forClass, {
-            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
+            existingValues.concurrentGetOrPutProxy(Instance(forClass, ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
         })
     }
 
@@ -70,7 +70,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     override fun <R, K> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKey: (K) -> R) {
         keyedFactories.put(forClass, {
             key ->
-            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, key), { factoryCalledPerKey(key as K) })
+            existingValues.concurrentGetOrPutProxy(Instance(forClass, key), { factoryCalledPerKey(key as K) })
         })
     }
 
@@ -78,7 +78,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     override fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K) -> R) {
         keyedFactories.put(forClass, {
             key ->
-            existingValues.concurrentGetOrPutSlightlyUnsafe(Instance(forClass, ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
+            existingValues.concurrentGetOrPutProxy(Instance(forClass, ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
         })
     }
 
