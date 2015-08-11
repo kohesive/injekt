@@ -1,4 +1,4 @@
-package uy.kohesive.injekt
+package uy.kohesive.injekt.api
 
 public interface InjektFactory {
     public fun <R> getInstance(forClass: Class<R>): R

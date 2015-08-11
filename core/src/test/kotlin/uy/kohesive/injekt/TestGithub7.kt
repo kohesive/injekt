@@ -1,6 +1,9 @@
-package uy.kohesive.injekt
+package uy.kohesive.injekt.tests
 
 import org.junit.Test
+import uy.kohesive.injekt.InjektMain
+import uy.kohesive.injekt.api.InjektRegistrar
+import uy.kohesive.injekt.injectValue
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.properties.Delegates
 import kotlin.test.assertEquals

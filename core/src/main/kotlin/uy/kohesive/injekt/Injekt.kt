@@ -1,5 +1,7 @@
 package uy.kohesive.injekt
 
+import uy.kohesive.injekt.api.InjektScope
+import uy.kohesive.injekt.api.InjektScopedMain
 import uy.kohesive.injekt.registry.default.DefaultRegistrar
 import kotlin.properties.Delegates
 import kotlin.properties.ReadOnlyProperty

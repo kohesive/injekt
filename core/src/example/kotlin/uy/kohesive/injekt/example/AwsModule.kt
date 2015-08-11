@@ -1,6 +1,6 @@
 package uy.kohesive.injekt.example
 
-import uy.kohesive.injekt.*
+import uy.kohesive.injekt.api.*
 
 // our module exports an injectable singletone for an Amazon S3 client, perfectly configured!
 

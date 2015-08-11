@@ -2,7 +2,7 @@ package uy.kohesive.injekt.example
 
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.InjektMain
-import uy.kohesive.injekt.InjektRegistrar
+import uy.kohesive.injekt.api.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.platform.platformStatic

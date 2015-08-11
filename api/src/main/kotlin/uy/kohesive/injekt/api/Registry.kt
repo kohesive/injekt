@@ -1,4 +1,4 @@
-package uy.kohesive.injekt
+package uy.kohesive.injekt.api
 
 import kotlin.reflect.KClass
 

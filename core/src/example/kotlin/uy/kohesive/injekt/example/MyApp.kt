@@ -3,6 +3,7 @@ package uy.kohesive.injekt.example
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import uy.kohesive.injekt.*
+import uy.kohesive.injekt.api.*
 import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 

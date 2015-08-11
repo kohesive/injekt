@@ -1,9 +1,8 @@
 package uy.kohesive.injekt.registry.default
 
-import uy.kohesive.injekt.InjektRegistrar
-import uy.kohesive.injekt.InjektionException
+import uy.kohesive.injekt.api.InjektRegistrar
+import uy.kohesive.injekt.api.InjektionException
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 /**
  * Default implementation of registry that uses ConcurrentHashMaps which have zero or few locks during reads, and work well

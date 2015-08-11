@@ -1,4 +1,4 @@
-package uy.kohesive.injekt
+package uy.kohesive.injekt.api
 
 class InjektionException(msg: String) : RuntimeException(msg)
 

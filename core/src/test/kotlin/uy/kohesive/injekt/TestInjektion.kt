@@ -2,6 +2,7 @@ package uy.kohesive.injekt.tests
 
 import org.junit.Test
 import uy.kohesive.injekt.*
+import uy.kohesive.injekt.api.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import kotlin.platform.platformStatic
