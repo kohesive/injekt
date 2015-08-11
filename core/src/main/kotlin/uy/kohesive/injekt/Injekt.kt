@@ -65,12 +65,3 @@ public inline fun <reified R, reified T> Delegates.injectLogger(byName: String):
     }
 }
 
-// to be removed
-
-@deprecated("use Delegates.injectLazy") public inline fun <reified T> Delegates.injektLazy(): ReadOnlyProperty<Any?, T> = injectLazy()
-@deprecated("use Delegates.injectValue") public inline fun <reified T> Delegates.injektValue(): ReadOnlyProperty<Any?, T> = injectValue()
-@deprecated("use Delegates.injectLazy") public inline fun <reified T> Delegates.injektLazy(key: Any): ReadOnlyProperty<Any?, T> = injectLazy(key)
-@deprecated("use Delegates.injectValue") public inline fun <reified T> Delegates.injektValue(key: Any): ReadOnlyProperty<Any?, T> = injectValue(key)
-@deprecated("use Delegates.injectLogger") public inline fun <reified R, reified T> Delegates.injektLogger(): ReadOnlyProperty<R, T> = injectLogger()
-@deprecated("use Delegates.injectLogger") public inline fun <reified R, reified T> Delegates.injektLogger(byClass: Class<*>): ReadOnlyProperty<R, T> = injectLogger(byClass)
-@deprecated("use Delegates.injectLogger") public inline fun <reified R, reified T> Delegates.injektLogger(byName: String): ReadOnlyProperty<R, T> = injectLogger(byName)
