@@ -1,3 +1,9 @@
+2015-??-?? IN DEVELOPMENT
+
+...
+
+====
+
 2015-08-11 v1.2.0
 
 * [BREAKING CHANGE] Fixing #8 - Moved api classes to `uy.kohesive.injekt.api` package so that separate module jars do not have classes in the same package, breaking use in Android
