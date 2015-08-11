@@ -121,14 +121,3 @@ public open class DefaultRegistrar : InjektRegistrar {
 
 }
 
-public fun <K, V> ConcurrentMap<K, V>.concurrentGetOrPutSlightlyUnsafe(key: K, defaultValue: () -> V): V {
-    // TODO: this is not perfect, the factory could be called more than once if two threads compete to initialize a value
-    //       JDK 8 has a real version of ConcurrentMap.computeIfAbsent
-
-    var localValue: V = null
-    fun invokeAndStore(): V {
-        localValue = defaultValue()
-        return localValue
-    }
-    return putIfAbsent(key, invokeAndStore()) ?: localValue
-}
