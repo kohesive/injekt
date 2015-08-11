@@ -153,7 +153,7 @@ When using a factory that is per-thread (one instance of each object is generate
 * Configuration loading, binding and injektion as a separate module.
 * Tell me what you would like to see, add Issues here in Github with requests.
 
-## Recommneded libraries:
+## Recommended libraries:
 
 Other libraries that we recommend a building blocks for Kotlin applications:
 
