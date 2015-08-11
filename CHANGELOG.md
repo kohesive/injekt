@@ -1,6 +1,6 @@
 2015-08-11 v1.2.0
 
-* [BREAKING CHANGE] Moved api classes to `uy.kohesive.injekt.api` package so that separate module jars do not have classes in the same package, breaking use in Android
+* [BREAKING CHANGE] Fixing #8 - Moved api classes to `uy.kohesive.injekt.api` package so that separate module jars do not have classes in the same package, breaking use in Android
 * [BREAKING CHANGE] Remove deprecated "injekt*" delegates (replaced with "inject*")
 
 ====
