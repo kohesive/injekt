@@ -158,6 +158,7 @@ When using a factory that is per-thread (one instance of each object is generate
 Other libraries that we recommend a building blocks for Kotlin applications:
 
 * [Kovenant](http://kovenant.komponents.nl) - promises for Kotlin, easy, fun, and async! (JVM / Android)
+* [Klutter](http://github.com/klutter) - simple, small, useful things for Kotlin
 
 ## With help from...
 
