@@ -21,7 +21,7 @@ class TestTypesafeConfigInjection {
         override fun ConfigRegistrar.registerConfigurables() {
             bindClassAtConfigPath<HttpConfig>("http")
             bindClassAtConfigPath<DataConfig>("data")
-            import("other", OtherModule)
+            importModule("other", OtherModule)
         }
 
         override fun InjektRegistrar.registerInjectables() {

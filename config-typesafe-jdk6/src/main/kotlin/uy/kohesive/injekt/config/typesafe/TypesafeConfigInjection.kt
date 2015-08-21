@@ -29,7 +29,7 @@ public abstract class ConfigAndInjektScopedMain(public val scope: InjektScope, p
     private data class KonfigureClassAtPath(val path: String, val klass: Class<*>)
 
     private inner class ScopedConfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): ConfigRegistrar {
-        override fun import(atPath: String, module: ConfigModule) {
+        override fun importModule(atPath: String, module: ConfigModule) {
             module.registerWith(ScopedConfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
         }
 
@@ -66,7 +66,7 @@ public abstract class ConfigAndInjektScopedMain(public val scope: InjektScope, p
 }
 
 public interface ConfigRegistrar {
-    fun import(atPath: String, module: ConfigModule)
+    fun importModule(atPath: String, module: ConfigModule)
 
     final inline fun <reified T> bindClassAtConfigPath(configPath: String) {
         bindClassAtConfigPath(configPath, javaClass<T>())
