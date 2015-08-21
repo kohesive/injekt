@@ -6,7 +6,7 @@
 
 2015-08-21 v1.3.0
 
-* Added Configuration injection from Typesafe Config (see main README)
+* Added Configuration injection from Typesafe Config (see [README in config-typesafe](config-typesafe/))
 * Added storage in Injekt scope for addons to work within a scope
 
 ====
