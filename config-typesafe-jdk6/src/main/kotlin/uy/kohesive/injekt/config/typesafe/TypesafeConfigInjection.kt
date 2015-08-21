@@ -15,22 +15,22 @@ import java.net.URI
 /**
  * A class that startups up an system using Injekt + TypesafeConfig, using the default global scope, and default object binder
  */
-public abstract class ConfigAndInjektMain(): ConfigAndInjektScopedMain(Injekt)
+public abstract class KonfigAndInjektMain(): KonfigAndInjektScopedMain(Injekt)
 
 /**
  *  A startup module that registers and uses singletons/object factories from a specific scope,
  *  and an ObjectMapper to bind configuration properties into class instances.
  */
-public abstract class ConfigAndInjektScopedMain(public val scope: InjektScope, public val mapper: ObjectMapper = jacksonObjectMapper()) : InjektModule, ConfigModule {
+public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, public val mapper: ObjectMapper = jacksonObjectMapper()) : InjektModule, KonfigModule {
     private val ADDON_ID = "Konfigure"
 
     abstract fun configFactory(): Config
 
     private data class KonfigureClassAtPath(val path: String, val klass: Class<*>)
 
-    private inner class ScopedConfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): ConfigRegistrar {
-        override fun importModule(atPath: String, module: ConfigModule) {
-            module.registerWith(ScopedConfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
+    private inner class ScopedKonfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): KonfigRegistrar {
+        override fun importModule(atPath: String, module: KonfigModule) {
+            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
         }
 
         override fun bindClassAtConfigRoot(klass: Class<*>) {
@@ -57,7 +57,7 @@ public abstract class ConfigAndInjektScopedMain(public val scope: InjektScope, p
 
     init {
         val itemsToConfigure: MutableList<KonfigureClassAtPath> = scope.getAddonMetadata(ADDON_ID) ?: scope.setAddonMetadata(ADDON_ID, linkedListOf<KonfigureClassAtPath>())
-        val registrar = ScopedConfigRegistrar(emptyList(), scope, itemsToConfigure)
+        val registrar = ScopedKonfigRegistrar(emptyList(), scope, itemsToConfigure)
         registrar.registerConfigurables()
         val config = configFactory()
         registrar.loadAndInject(config)
@@ -65,8 +65,8 @@ public abstract class ConfigAndInjektScopedMain(public val scope: InjektScope, p
     }
 }
 
-public interface ConfigRegistrar {
-    fun importModule(atPath: String, module: ConfigModule)
+public interface KonfigRegistrar {
+    fun importModule(atPath: String, module: KonfigModule)
 
     final inline fun <reified T> bindClassAtConfigPath(configPath: String) {
         bindClassAtConfigPath(configPath, javaClass<T>())
@@ -84,11 +84,11 @@ public interface ConfigRegistrar {
 /**
  * A package of configuration bound items that can be included into a scope of someone else
  */
-public interface ConfigModule {
-    final internal fun registerWith(intoModule: ConfigRegistrar) {
+public interface KonfigModule {
+    final internal fun registerWith(intoModule: KonfigRegistrar) {
         intoModule.registerConfigurables()
     }
 
-    fun ConfigRegistrar.registerConfigurables()
+    fun KonfigRegistrar.registerConfigurables()
 }
 

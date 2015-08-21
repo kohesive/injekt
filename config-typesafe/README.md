@@ -39,8 +39,8 @@ data class HttpConfig(val httpPort: Int, val workerThreads: Int)
 The module creates an importable module that registers a configuration class, and any injectables, and code that uses the configuration object later via injection:
 
 ```kotlin
-public object ServerModuleInjectables : ConfigModule, InjektModule {
-    override fun ConfigRegistrar.registerConfigurables() {
+public object ServerModuleInjectables : KonfigModule, InjektModule {
+    override fun KonfigRegistrar.registerConfigurables() {
         // register our HttpConfig object to be bound from the root of our section of the configuration file
         bindClassAtConfigRoot<HttpConfig>()
     }
@@ -59,7 +59,7 @@ Now the main controlling class, the Application creates something similar to an 
 
 ```kotlin
 class MyApp {
-    companion object : ConfigAndInjektMain() {
+    companion object : KonfigAndInjektMain() {
         // my app starts here with a static main()
         platformStatic public fun main(args: Array<String>) {
             MyApp().run()
@@ -71,7 +71,7 @@ class MyApp {
         }
         
         // register any configuration bindings, and import our server module
-        override fun ConfigRegistrar.registerConfigurables() {
+        override fun KonfigRegistrar.registerConfigurables() {
             bindClassAtConfigPath<S3Config>("data")
             bindClassAtConfigPath<OtherConfig>("other")
             

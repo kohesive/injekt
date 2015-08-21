@@ -10,7 +10,7 @@ import uy.kohesive.injekt.api.InjektRegistrar
 import kotlin.test.assertEquals
 
 class TestTypesafeConfigInjection {
-    companion object : ConfigAndInjektMain() {
+    companion object : KonfigAndInjektMain() {
         override fun configFactory(): Config {
             return loadConfig(MapAsConfig(kotlin.mapOf(
                     "http" to kotlin.mapOf("httpPort" to 8080, "workerThreads" to 16),
@@ -18,7 +18,7 @@ class TestTypesafeConfigInjection {
                     "other" to kotlin.mapOf("name" to "frisbee"))))
         }
 
-        override fun ConfigRegistrar.registerConfigurables() {
+        override fun KonfigRegistrar.registerConfigurables() {
             bindClassAtConfigPath<HttpConfig>("http")
             bindClassAtConfigPath<DataConfig>("data")
             importModule("other", OtherModule)
@@ -63,8 +63,8 @@ class TestTypesafeConfigInjection {
 data class OtherConfig(val name: String)
 data class OtherThingWantingConfig(val cfg: OtherConfig = Injekt.get())
 
-public object OtherModule : ConfigModule, InjektModule {
-    override fun ConfigRegistrar.registerConfigurables() {
+public object OtherModule : KonfigModule, InjektModule {
+    override fun KonfigRegistrar.registerConfigurables() {
         bindClassAtConfigRoot<OtherConfig>()
     }
 
