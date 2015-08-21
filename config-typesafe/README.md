@@ -16,16 +16,16 @@ load and parse methods directly.
 Using a configuration file, `myConfig.conf`
 ```json
 { 
-    http: { 
-        httpPort: 8080
-        workerThreads: 16 
+    "http": { 
+        "httpPort": 8080,
+        "workerThreads": 16 
     }
-    data: { 
-        bucket: "com.test.bucket"
-        region: "us-east"
+    "data": { 
+        "bucket": "com.test.bucket",
+        "region": "us-east"
     }
-    other: {
-        name: "frisbee"
+    "other": {
+        "name": "frisbee"
     }
 }
 ```
