@@ -6,7 +6,7 @@ Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can
 
 Injekt is NOT inversion of control.  It is NOT some mystical class file manipulator.  It is NOT complex.  But it IS powerful.
 
-Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](inject-typesafe/).
+Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
 
 ## Maven Dependnecy
 
@@ -150,7 +150,7 @@ When using a factory that is per-thread, be sure not to pass the object to other
 
 ## Injecting Configuration with Typesafe Config
 
-Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](inject-typesafe/).
+Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
 
 ## Coming soon... (RoadMap)
 
