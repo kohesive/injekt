@@ -27,9 +27,21 @@ public open class DefaultRegistrar : InjektRegistrar {
     private val factories = ConcurrentHashMap<Class<*>, () -> Any>()
     private val keyedFactories = ConcurrentHashMap<Class<*>, (Any) -> Any>()
 
+    private val metadataForAddons = ConcurrentHashMap<String, Any>()
+
     data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String) -> Any, val classFactory: (Class<*>) -> Any)
 
     private volatile var loggerFactory: LoggerInfo? = null
+
+    @suppress("UNCHECKED_CAST")
+    override public fun <T> getAddonMetadata(addon: String): T {
+       return metadataForAddons.get(addon) as T
+    }
+
+    override public fun <T> setAddonMetadata(addon: String, metadata: T): T {
+        metadataForAddons.set(addon, metadata)
+        return metadata
+    }
 
     override fun <T> hasFactory(forClass: Class<T>): Boolean {
         return factories.get(forClass) != null ||

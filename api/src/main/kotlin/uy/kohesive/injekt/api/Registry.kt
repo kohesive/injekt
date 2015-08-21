@@ -13,6 +13,8 @@ public interface InjektRegistry {
     public fun <T> alias(existingRegisteredClass: Class<T>, otherClassesThatAreSame: List<Class<*>>)
     public fun <T> hasFactory(forClass: Class<T>): Boolean
 
+    public fun <T> getAddonMetadata(addon: String): T
+    public fun <T> setAddonMetadata(addon: String, metadata: T): T
 
     public final inline fun <reified T : Any> T.registerAsSingleton() {
         addSingleton(this)
