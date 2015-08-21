@@ -15,15 +15,15 @@ load and parse methods directly.
 
 Using a configuration file, `myConfig.conf`
 ```json
-{ 
-    "http": { 
+{
+    "http": {
         "httpPort": 8080,
-        "workerThreads": 16 
-    }
-    "data": { 
+        "workerThreads": 16
+    },
+    "data": {
         "bucket": "com.test.bucket",
         "region": "us-east"
-    }
+    },
     "other": {
         "name": "frisbee"
     }
