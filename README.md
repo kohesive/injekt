@@ -12,7 +12,7 @@ First, include the dependency in your Gradle / Maven projects, ones that have Ko
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.2.+"
+compile "uy.kohesive.injekt:injekt-core:1.3.+"
 ```
 
 **Maven:**
@@ -20,7 +20,7 @@ compile "uy.kohesive.injekt:injekt-core:1.2.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.2.0,1.3.0)</version>
+    <version>[1.3.0,1.4.0)</version>
 </dependency>
 ```
 
