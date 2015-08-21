@@ -2,6 +2,7 @@ package uy.kohesive.injekt.registry.default
 
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.InjektionException
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -15,18 +16,36 @@ public open class DefaultRegistrar : InjektRegistrar {
     private val NOKEY = object {}
 
     data class Instance(val forWhatClass: Class<*>, val forKey: Any)
-    data class ThreadKey(val forThread: Thread, val forKey: Any)
 
     private val existingValues = ConcurrentHashMap<Instance, Any>()
+    private val threadedValues = object : ThreadLocal<HashMap<Instance, Any>>() {
+       override protected fun initialValue(): HashMap<Instance, Any> {
+           return hashMapOf()
+       }
+    }
+
     private val factories = ConcurrentHashMap<Class<*>, () -> Any>()
     private val keyedFactories = ConcurrentHashMap<Class<*>, (Any) -> Any>()
+
+    private val metadataForAddons = ConcurrentHashMap<String, Any>()
 
     data class LoggerInfo(val forWhatClass: Class<*>, val nameFactory: (String) -> Any, val classFactory: (Class<*>) -> Any)
 
     private volatile var loggerFactory: LoggerInfo? = null
 
+    @suppress("UNCHECKED_CAST")
+    override public fun <T> getAddonMetadata(addon: String): T {
+       return metadataForAddons.get(addon) as T
+    }
+
+    override public fun <T> setAddonMetadata(addon: String, metadata: T): T {
+        metadataForAddons.set(addon, metadata)
+        return metadata
+    }
+
     override fun <T> hasFactory(forClass: Class<T>): Boolean {
-        return factories.get(forClass) != null || keyedFactories.get(forClass) != null
+        return factories.get(forClass) != null ||
+                keyedFactories.get(forClass) != null
     }
 
     override fun <T> alias(existingRegisteredClass: Class<T>, otherClassesThatAreSame: List<Class<*>>) {
@@ -48,7 +67,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     override fun <T : Any> addSingleton(forClass: Class<T>, singleInstance: T) {
         addSingletonFactory(forClass, { singleInstance })
-        getInstance(forClass)
+        getInstance(forClass) // load value into front cache
     }
 
     override fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: () -> R) {
@@ -61,7 +80,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     override fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: () -> R) {
         factories.put(forClass, {
-            existingValues.concurrentGetOrPutProxy(Instance(forClass, ThreadKey(Thread.currentThread(), NOKEY)), { factoryCalledOncePerThread() })
+            threadedValues.get().getOrPut(Instance(forClass, NOKEY), { factoryCalledOncePerThread() })
         })
     }
 
@@ -75,9 +94,8 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     @suppress("UNCHECKED_CAST")
     override fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K) -> R) {
-        keyedFactories.put(forClass, {
-            key ->
-            existingValues.concurrentGetOrPutProxy(Instance(forClass, ThreadKey(Thread.currentThread(), key)), { factoryCalledPerKeyPerThread(key as K) })
+        keyedFactories.put(forClass, {  key ->
+            threadedValues.get().getOrPut(Instance(forClass, key), { factoryCalledPerKeyPerThread(key as K) })
         })
     }
 

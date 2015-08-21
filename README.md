@@ -6,13 +6,15 @@ Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can
 
 Injekt is NOT inversion of control.  It is NOT some mystical class file manipulator.  It is NOT complex.  But it IS powerful.
 
+Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
+
 ## Maven Dependnecy
 
 First, include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.2.+"
+compile "uy.kohesive.injekt:injekt-core:1.3.+"
 ```
 
 **Maven:**
@@ -20,14 +22,14 @@ compile "uy.kohesive.injekt:injekt-core:1.2.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.2.0,1.3.0)</version>
+    <version>[1.3.0,1.4.0)</version>
 </dependency>
 ```
 
 
 *(deploy note:  Maven repo publishing is in progress, should appear soon)*
 
-## Injektor "Main"
+## Injekt "Main"
 
 At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the `InjektModule` on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/core/src/example/kotlin/uy/kohesive/injekt/example/MyApp.kt))
 
@@ -144,13 +146,16 @@ Note:  if you extend `InjektMain` you are also a module that can be imported.  B
 
 ## One Instance Per-Thread Factories -- a tip
 
-When using a factory that is per-thread (one instance of each object is generated per thread), it is important that you consider how the instance is used.  If you generate it near the start of processing on a thread avoid passing the object to be used on a different thread if you truly want to isolate the instances by thread.  Currently, the default registry has lock contention across threads for these per-thread factories, so asking too often will cause possible thread contention.  But, when [issue #2](https://github.com/kohesive/injekt/issues/2) is resolved, thread local storage will be used making it very fast to grab the instance any time you need it rather than holding onto the instance for a long duration.  Until then, watch how you uses these.
+When using a factory that is per-thread, be sure not to pass the object to other threads if you really intend for them to be isolated.  Lookup of such objects is from ThreadLocal storage and fast, so it is better to keep these objects for shorter durations or in situations guaranteed to stay on the same thread as that which retrieved the object.
+
+## Injecting Configuration with Typesafe Config
+
+Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
 
 ## Coming soon... (RoadMap)
 
 * More about scopes
 * Materializing object graphs without explicit calls to Injekt
-* Configuration loading, binding and injektion as a separate module.
 * Tell me what you would like to see, add Issues here in Github with requests.
 
 ## Recommended libraries:

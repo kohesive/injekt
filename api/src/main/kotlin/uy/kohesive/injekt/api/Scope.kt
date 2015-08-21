@@ -7,7 +7,7 @@ import kotlin.properties.ReadOnlyProperty
 /**
  * Not much difference than a InjektRegistrar for now...
  */
-public open class InjektScope(val registrar: InjektRegistrar) : InjektRegistrar by registrar{
+public open class InjektScope(val registrar: InjektRegistrar) : InjektRegistrar by registrar {
     override fun <T> alias(existingRegisteredClass: Class<T>, otherClassesThatAreSame: List<Class<*>>) {
         if (!hasFactory(existingRegisteredClass)) {
             throw InjektionException("Cannot alias anything to  ${existingRegisteredClass.getName()}, it does not have a registered factory")

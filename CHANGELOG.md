@@ -1,3 +1,16 @@
+2015-??-?? IN DEVELOPMENT
+
+...
+
+====
+
+2015-08-21 v1.3.0
+
+* Added Configuration injection from Typesafe Config (see [README in config-typesafe](config-typesafe/))
+* Added storage in Injekt scope for addons to work within a scope
+
+====
+
 2015-08-11 v1.2.0
 
 * [BREAKING CHANGE] Fixing #8 - Moved api classes to `uy.kohesive.injekt.api` package so that separate module jars do not have classes in the same package, breaking use in Android

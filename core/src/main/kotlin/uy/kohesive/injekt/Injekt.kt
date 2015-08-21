@@ -8,6 +8,9 @@ import kotlin.properties.ReadOnlyProperty
 
 public volatile var Injekt: InjektScope = InjektScope(DefaultRegistrar())
 
+/**
+ * A class that startups up an system using Injekt, using the default global scope
+ */
 public abstract class InjektMain : InjektScopedMain(Injekt)
 
 // top level Injekt scope
