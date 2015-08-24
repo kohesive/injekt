@@ -1,6 +1,22 @@
 2015-??-?? IN DEVELOPMENT
 
-...
+...coming soon
+
+* lazyBind* methods defer loading until end of configuration chain with only the last registered item for a path element winning (allowing you to load an extended descendant class for example instead of the default ancestor)
+
+====
+
+2015-08-24 v1.3.2
+
+* a KonfigRegistrar is not also an InjektRegistrar so you can retrieve values if immediately bound from configuration
+* bind* methods now load configuration objects immediately
+
+====
+
+2015-08-24 v1.3.1
+
+* added protected resolvedConfig member to KonfigAndInjektMain in case a descendant wants the raw config object
+* updated to Klutter 0.2.2
 
 ====
 
