@@ -31,26 +31,41 @@ public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, p
 
     private data class KonfigureClassAtPath(val path: String, val klass: Class<*>)
 
-    private inner class ScopedKonfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): KonfigRegistrar {
+    private inner class ScopedKonfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): KonfigRegistrar, InjektRegistrar by scope {
+//        override fun lazyImportModule(atPath: String, module: KonfigModule) {
+//            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
+//        }
+
         override fun importModule(atPath: String, module: KonfigModule) {
-            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
+            val tempItemsToConfigure: MutableList<KonfigureClassAtPath> = linkedListOf()
+            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, tempItemsToConfigure))
+            loadAndInject(resolvedConfig, tempItemsToConfigure)
         }
+
+//        override fun lazyBindClassAtConfigRoot(klass: Class<*>) {
+//            val fullpath = path.filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
+//            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
+//        }
+
+//        override fun lazyBindClassAtConfigPath(configPath: String, klass: Class<*>) {
+//            val fullpath = (path + configPath.split('.')).filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
+//            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
+//        }
 
         override fun bindClassAtConfigRoot(klass: Class<*>) {
             val fullpath = path.filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
+            loadAndInject(resolvedConfig, listOf(KonfigureClassAtPath(fullpath, klass)))
         }
 
         override fun bindClassAtConfigPath(configPath: String, klass: Class<*>) {
             val fullpath = (path + configPath.split('.')).filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
+            loadAndInject(resolvedConfig, listOf(KonfigureClassAtPath(fullpath, klass)))
         }
 
         @suppress("UNCHECKED_CAST")
-        fun loadAndInject(config: Config) {
-            itemsToConfigure.forEach {
+        fun loadAndInject(config: Config, whichItemsToConfigure: List<KonfigureClassAtPath>) {
+            whichItemsToConfigure.forEach {
                 val configAtPath = config.getConfig(it.path)
-                // TODO: handle a class that wants to be constructed with a configuration object instead of binding
                 val asJson = configAtPath.root().render(ConfigRenderOptions.concise().setJson(true))
                 val instance: Any = mapper.readValue(asJson, it.klass)!!
                 scope.registrar.addSingleton(it.klass as Class<Any>, instance)
@@ -60,27 +75,77 @@ public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, p
 
     init {
         val itemsToConfigure: MutableList<KonfigureClassAtPath> = scope.getAddonMetadata(ADDON_ID) ?: scope.setAddonMetadata(ADDON_ID, linkedListOf<KonfigureClassAtPath>())
+        resolvedConfig = configFactory()
         val registrar = ScopedKonfigRegistrar(emptyList(), scope, itemsToConfigure)
         registrar.registerConfigurables()
-        resolvedConfig = configFactory()
-        registrar.loadAndInject(resolvedConfig)
+        registrar.loadAndInject(resolvedConfig, itemsToConfigure)
+        itemsToConfigure.clear()
         scope.registrar.registerInjectables()
     }
 }
 
-public interface KonfigRegistrar {
+public interface KonfigRegistrar: InjektRegistrar {
+    /**
+     * import a module, config binding is deferred until an outer module causes a load, or end of the
+     * configuration registration
+     */
+ //   fun lazyImportModule(atPath: String, module: KonfigModule)
+
+    /**
+     * import a module loading it and any submodules immediately
+     */
     fun importModule(atPath: String, module: KonfigModule)
 
+    /**
+     * bind a class at a configuration path, deferring binding until a module causes a load, or end of
+     * configuration chain
+     */
+//    final inline fun <reified T> lazyBindClassAtConfigPath(configPath: String) {
+//        lazyBindClassAtConfigPath(configPath, javaClass<T>())
+//    }
+
+    /**
+     * bind a class bindings its values from a configuration path immediately
+     */
     final inline fun <reified T> bindClassAtConfigPath(configPath: String) {
         bindClassAtConfigPath(configPath, javaClass<T>())
     }
 
+    /**
+     * bind a class at a configuration path, deferring binding until a module causes a load, or end of
+     * configuration chain
+     */
+//    fun lazyBindClassAtConfigPath(configPath: String, klass: Class<*>)
+
+    /**
+     * bind a class bindings its values from a configuration path immediately
+     */
     fun bindClassAtConfigPath(configPath: String, klass: Class<*>)
 
+    /**
+     * bind a class at root of current configuration path, deferring binding until a module causes a load,
+     * or end of configuration chain
+     */
+//    final inline fun <reified T> lazyBindClassAtConfigRoot() {
+//        lazyBindClassAtConfigRoot(javaClass<T>())
+//    }
+
+    /**
+     * bind a class bindings its values from the root of the current configuration path immediately
+     */
     final inline fun <reified T> bindClassAtConfigRoot() {
         bindClassAtConfigRoot(javaClass<T>())
     }
 
+    /**
+     * bind a class at root of current configuration path, deferring binding until a module causes a load,
+     * or end of configuration chain
+     */
+//    fun lazyBindClassAtConfigRoot(klass: Class<*>)
+
+    /**
+     * bind a class bindings its values from the root of the current configuration path immediately
+     */
     fun bindClassAtConfigRoot(klass: Class<*>)
 }
 
