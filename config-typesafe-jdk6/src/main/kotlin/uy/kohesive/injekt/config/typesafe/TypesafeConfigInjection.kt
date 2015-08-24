@@ -11,6 +11,7 @@ import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.InjektScope
 import java.net.URI
+import kotlin.properties.Delegates
 
 /**
  * A class that startups up an system using Injekt + TypesafeConfig, using the default global scope, and default object binder
@@ -23,6 +24,8 @@ public abstract class KonfigAndInjektMain(): KonfigAndInjektScopedMain(Injekt)
  */
 public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, public val mapper: ObjectMapper = jacksonObjectMapper()) : InjektModule, KonfigModule {
     private val ADDON_ID = "Konfigure"
+
+    protected var resolvedConfig: Config by Delegates.notNull()
 
     abstract fun configFactory(): Config
 
@@ -59,8 +62,8 @@ public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, p
         val itemsToConfigure: MutableList<KonfigureClassAtPath> = scope.getAddonMetadata(ADDON_ID) ?: scope.setAddonMetadata(ADDON_ID, linkedListOf<KonfigureClassAtPath>())
         val registrar = ScopedKonfigRegistrar(emptyList(), scope, itemsToConfigure)
         registrar.registerConfigurables()
-        val config = configFactory()
-        registrar.loadAndInject(config)
+        resolvedConfig = configFactory()
+        registrar.loadAndInject(resolvedConfig)
         scope.registrar.registerInjectables()
     }
 }

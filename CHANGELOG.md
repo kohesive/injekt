@@ -4,6 +4,13 @@
 
 ====
 
+2015-08-24 v1.3.1
+
+* added protected resolvedConfig member to KonfigAndInjektMain in case a descendant wants the raw config object
+* updated to Klutter 0.2.2
+
+====
+
 2015-08-21 v1.3.0
 
 * Added Configuration injection from Typesafe Config (see [README in config-typesafe](config-typesafe/))
