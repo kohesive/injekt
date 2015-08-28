@@ -26,9 +26,6 @@ compile "uy.kohesive.injekt:injekt-core:1.3.+"
 </dependency>
 ```
 
-
-*(deploy note:  Maven repo publishing is in progress, should appear soon)*
-
 ## Injekt "Main"
 
 At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the `InjektModule` on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/core/src/example/kotlin/uy/kohesive/injekt/example/MyApp.kt))
