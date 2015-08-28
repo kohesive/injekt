@@ -10,7 +10,7 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 ## Maven Dependnecy
 
-First, include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
+Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
 
 **Gradle:**
 ```
