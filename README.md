@@ -14,7 +14,7 @@ Include the dependency in your Gradle / Maven projects, ones that have Kotlin co
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.3.+"
+compile "uy.kohesive.injekt:injekt-core:1.4.+"
 ```
 
 **Maven:**
@@ -22,7 +22,7 @@ compile "uy.kohesive.injekt:injekt-core:1.3.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.3.0,1.4.0)</version>
+    <version>[1.4.0,1.5.0)</version>
 </dependency>
 ```
 
@@ -42,7 +42,7 @@ class MyApp {
         // easy to find on the receiver class
         override fun InjektRegistrar.registerInjectables() {
             // let's setup my logger first
-            addLoggerFactory<Logger>({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
+            addLoggerFactory({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
 
             // now some singletons
             addSingleton(HttpServerConfig("0.0.0.0", 8080, 16))
@@ -52,20 +52,19 @@ class MyApp {
             addSingletonFactory { DontCreateUntilWeNeedYa() }
 
             // or lets only have one database connection per thread, basically a singleton per thread
-            addPerThreadFactory { JdbcDatabaseConnection(Injekt.get()) }  // wow, nested injections!!!
+            addPerThreadFactory { JdbcDatabaseConnection(Injekt.get()) }  // wow, nested inections!!!
 
             // or give me a new one each time it is injected
             addFactory { LazyDazy() }
 
-            // or be weird and use extension functions on classes that are visible while in this lambda
+            // or use extension functions on classes that are visible while in this lambda
             KnownObject().registerAsSingleton()
-            KnownObject::class.registerFactory { KnownObject() }
 
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
-            addPerKeyFactory { petName: String -> pets.get(petName) }
+            addPerKeyFactory { petName: String -> pets.get(petName)!! }
 
-            // import prebuilt Injekt modules
+            // use prebuilt injectable packages
             importModule(AmazonS3InjektModule)
         }
     }
@@ -148,6 +147,24 @@ When using a factory that is per-thread, be sure not to pass the object to other
 ## Injecting Configuration with Typesafe Config
 
 Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
+
+## Generics, Erased Type and Injection
+
+All of the registry and injection methods try to retain full generic type information if it is available at the calling site to the compiler.
+This works for inferred types, and types you specify in the form of `someFunction<MyType<WithGenerics>>()`, and even if you pass in `javaClass<MyType<WithGenerics>>()`
+-- and pass these to an Injekt method expecting a `Class<T>`.  The latter works since we actually ignore the `Class<T>`, and we look at what it is carrying: the reified `T`.
+
+Note that using Kotlin `MyClass::class.java` as the `Class<T>` parameter to Injekt methods will act as an erased raw type since Generic information is not available
+so any injection site must pass in the same style of class reference to the `get<T>` method.
+
+It is preferable that you use (in priority order):
+
+* The inferred forms of Injekt functions that infer their type from the surrounding expression.
+* Or if you want to change the type recognized by Injekt, use an explicit generic type for the function `someFunction<MyType>()`.
+* If those are not to your liking, then use the `TypeReference` version passing in a `typeRef<T>()` generated `TypeReference` ... this is your fallback in cases where things need full and exact control.
+* And if you must, you can use the `Class<T>` versions of the methods, but be careful of what can be inferred or not from the value passed in.  If `T` isn't obvious in the local scope to the compiler, things may work out differently than expected.
+
+By doing this, you prevent surprises because you are in full control and it is obvious what types are expected.
 
 ## Coming soon... (RoadMap)
 

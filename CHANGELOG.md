@@ -1,8 +1,16 @@
-2015-??-?? IN DEVELOPMENT
+====
 
-...coming soon
+2015-09-03 v1.4.0
 
-* lazyBind* methods defer loading until end of configuration chain with only the last registered item for a path element winning (allowing you to load an extended descendant class for example instead of the default ancestor)
+I tried to do this without many breaking changes, but there is a chance something breaks so recompile and find out.  Deprecated methods will be removed very soon, so move away from them quickly.
+
+* Support for generic types for injection (#13), i.e. `Something<Map<String, List<String>>`` can have a specific singleton or factory.
+* Added methods accepting `TypeReference` objects for more control over generics, although the default for all methods is full generic information unless subverted by the caller (passing in a Type that has generics erased and which we cannot reify to get the generics anyway)
+* added `typeRef<T>()` method which is similar to `javaClass<T>()` but contains full generic information.
+* Changed upper bounds of registry types to `T:Any` to prepare for M13 which likes this better
+* Registering a per key factory no longer expects the type of the key, deprecated version of method that expects that
+* BREAKING CHANGE: Had to replace `aliases` method with `addAlias` one at a time to be able to reify the generics for each alias
+* BREAKING CHANGE: Dropped `KClass` extension methods because they erase types and not sure if those or KType is better with coming M13
 
 ====
 

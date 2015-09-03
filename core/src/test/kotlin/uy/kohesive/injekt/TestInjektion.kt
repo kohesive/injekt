@@ -35,10 +35,10 @@ class TestInjektion {
 
             // register the descendant class to be created, allow any ancestor classes to be used
             addSingleton(DescendantThing("family"))
-            alias(javaClass<DescendantThing>(), listOf(javaClass<AncestorThing>()))
+            addAlias(javaClass<DescendantThing>(), javaClass<AncestorThing>())
 
             // logging is special!
-            addLoggerFactory(javaClass<MockLogger>(), { name -> MockLogger(name,null) }, { klass -> MockLogger(null, klass) })
+            addLoggerFactory<MockLogger>({ name -> MockLogger(name,null) }, { klass -> MockLogger(null, klass) })
         }
     }
 
@@ -119,7 +119,7 @@ class TestInjektion {
     }
 
     @Test public fun testKeyedInjection() {
-        Companion.scope.addPerKeyFactory(javaClass<KeyedThing>(), javaClass<String>(), { key -> KeyedThing("$key - ${System.currentTimeMillis()}") })
+        Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
         val one = Injekt.get<KeyedThing>("one")
         val two = Injekt.get<KeyedThing>("two")
         assertNotEquals(one,two)
@@ -127,7 +127,6 @@ class TestInjektion {
         assertEquals(one, oneAgain)
 
     }
-
 
 }
 
@@ -137,6 +136,7 @@ data class KeyedThing(val name: String)
 
 open data class AncestorThing(val name: String)
 data class DescendantThing(name: String): AncestorThing(name)
+
 
 // === code can make common things ready for injection in the best way possible, if these were other modules or packages
 //     they have defined some importable injections:
