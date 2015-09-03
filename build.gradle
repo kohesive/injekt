@@ -8,6 +8,9 @@ buildscript {
         maven {
             url 'http://repo.spring.io/plugins-release'
         }
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
     }
     //noinspection GroovyAssignabilityCheck
     dependencies {
