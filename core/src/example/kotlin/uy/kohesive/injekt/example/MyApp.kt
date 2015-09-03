@@ -18,7 +18,7 @@ class MyApp {
         // easy to find on the receiver class
         override fun InjektRegistrar.registerInjectables() {
             // let's setup my logger first
-            addLoggerFactory<Logger>({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
+            addLoggerFactory({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
 
             // now some singletons
             addSingleton(HttpServerConfig("0.0.0.0", 8080, 16))
@@ -33,13 +33,12 @@ class MyApp {
             // or give me a new one each time it is injected
             addFactory { LazyDazy() }
 
-            // or be weird and use extension functions on classes that are visible while in this lambda
+            // or use extension functions on classes that are visible while in this lambda
             KnownObject().registerAsSingleton()
-            KnownObject::class.registerFactory { KnownObject() }
 
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
-            addPerKeyFactory { petName: String -> pets.get(petName) }
+            addPerKeyFactory { petName: String -> pets.get(petName)!! }
 
             // use prebuilt injectable packages
             importModule(AmazonS3InjektModule)

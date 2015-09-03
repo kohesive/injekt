@@ -1,15 +1,14 @@
 package uy.kohesive.injekt.config.typesafe
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigRenderOptions
 import com.typesafe.config.ConfigResolveOptions
 import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.InjektModule
-import uy.kohesive.injekt.api.InjektRegistrar
-import uy.kohesive.injekt.api.InjektScope
+import uy.kohesive.injekt.api.*
 import java.net.URI
 import kotlin.properties.Delegates
 
@@ -29,124 +28,81 @@ public abstract class KonfigAndInjektScopedMain(public val scope: InjektScope, p
 
     abstract fun configFactory(): Config
 
-    private data class KonfigureClassAtPath(val path: String, val klass: Class<*>)
-
-    private inner class ScopedKonfigRegistrar(val path: List<String>, val scope: InjektScope, val itemsToConfigure: MutableList<KonfigureClassAtPath>): KonfigRegistrar, InjektRegistrar by scope {
-//        override fun lazyImportModule(atPath: String, module: KonfigModule) {
-//            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, itemsToConfigure))
-//        }
-
+    private inner class ScopedKonfigRegistrar(val path: List<String>, val scope: InjektScope): KonfigRegistrar, InjektRegistrar by scope {
         override fun importModule(atPath: String, module: KonfigModule) {
-            val tempItemsToConfigure: MutableList<KonfigureClassAtPath> = linkedListOf()
-            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope, tempItemsToConfigure))
-            loadAndInject(resolvedConfig, tempItemsToConfigure)
+            module.registerWith(ScopedKonfigRegistrar(path + atPath.split('.'), scope))
         }
 
-//        override fun lazyBindClassAtConfigRoot(klass: Class<*>) {
-//            val fullpath = path.filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-//            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
-//        }
-
-//        override fun lazyBindClassAtConfigPath(configPath: String, klass: Class<*>) {
-//            val fullpath = (path + configPath.split('.')).filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-//            itemsToConfigure.add(KonfigureClassAtPath(fullpath, klass))
-//        }
-
-        override fun bindClassAtConfigRoot(klass: Class<*>) {
+        override fun <T: Any> bindClassAtConfigRoot(klass: TypeReference<T>) {
             val fullpath = path.filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-            loadAndInject(resolvedConfig, listOf(KonfigureClassAtPath(fullpath, klass)))
+            loadAndInject(resolvedConfig, fullpath, klass)
         }
 
-        override fun bindClassAtConfigPath(configPath: String, klass: Class<*>) {
+        override fun <T: Any> bindClassAtConfigPath(configPath: String, klass: TypeReference<T>) {
             val fullpath = (path + configPath.split('.')).filter { it.isNotBlank() }.map { it.removePrefix(".").removeSuffix(".") }.joinToString(".")
-            loadAndInject(resolvedConfig, listOf(KonfigureClassAtPath(fullpath, klass)))
+            loadAndInject(resolvedConfig, fullpath, klass)
         }
 
         @suppress("UNCHECKED_CAST")
-        fun loadAndInject(config: Config, whichItemsToConfigure: List<KonfigureClassAtPath>) {
-            whichItemsToConfigure.forEach {
-                val configAtPath = config.getConfig(it.path)
-                val asJson = configAtPath.root().render(ConfigRenderOptions.concise().setJson(true))
-                val instance: Any = mapper.readValue(asJson, it.klass)!!
-                scope.registrar.addSingleton(it.klass as Class<Any>, instance)
-            }
+        fun <T: Any> loadAndInject(config: Config, fullPath: String, klass: TypeReference<T>) {
+            val configAtPath = config.getConfig(fullPath)
+            val asJson = configAtPath.root().render(ConfigRenderOptions.concise().setJson(true))
+            val instance: T = mapper.readValue(asJson, TypeFactory.defaultInstance().constructType(klass.type))!!
+            scope.registrar.addSingleton(klass, instance)
         }
     }
 
     init {
-        val itemsToConfigure: MutableList<KonfigureClassAtPath> = scope.getAddonMetadata(ADDON_ID) ?: scope.setAddonMetadata(ADDON_ID, linkedListOf<KonfigureClassAtPath>())
         resolvedConfig = configFactory()
-        val registrar = ScopedKonfigRegistrar(emptyList(), scope, itemsToConfigure)
+        val registrar = ScopedKonfigRegistrar(emptyList(), scope)
         registrar.registerConfigurables()
-        registrar.loadAndInject(resolvedConfig, itemsToConfigure)
-        itemsToConfigure.clear()
         scope.registrar.registerInjectables()
     }
 }
 
 public interface KonfigRegistrar: InjektRegistrar {
     /**
-     * import a module, config binding is deferred until an outer module causes a load, or end of the
-     * configuration registration
-     */
- //   fun lazyImportModule(atPath: String, module: KonfigModule)
-
-    /**
      * import a module loading it and any submodules immediately
      */
     fun importModule(atPath: String, module: KonfigModule)
 
     /**
-     * bind a class at a configuration path, deferring binding until a module causes a load, or end of
-     * configuration chain
+     * bind a class bindings its values from a configuration path immediately
      */
-//    final inline fun <reified T> lazyBindClassAtConfigPath(configPath: String) {
-//        lazyBindClassAtConfigPath(configPath, javaClass<T>())
-//    }
+    final inline fun <reified T: Any> bindClassAtConfigPath(configPath: String) {
+        bindClassAtConfigPath(configPath, fullType<T>())
+    }
 
     /**
      * bind a class bindings its values from a configuration path immediately
      */
-    final inline fun <reified T> bindClassAtConfigPath(configPath: String) {
-        bindClassAtConfigPath(configPath, javaClass<T>())
-    }
-
-    /**
-     * bind a class at a configuration path, deferring binding until a module causes a load, or end of
-     * configuration chain
-     */
-//    fun lazyBindClassAtConfigPath(configPath: String, klass: Class<*>)
+    fun <T: Any> bindClassAtConfigPath(configPath: String, klass: TypeReference<T>)
 
     /**
      * bind a class bindings its values from a configuration path immediately
      */
-    fun bindClassAtConfigPath(configPath: String, klass: Class<*>)
-
-    /**
-     * bind a class at root of current configuration path, deferring binding until a module causes a load,
-     * or end of configuration chain
-     */
-//    final inline fun <reified T> lazyBindClassAtConfigRoot() {
-//        lazyBindClassAtConfigRoot(javaClass<T>())
-//    }
-
-    /**
-     * bind a class bindings its values from the root of the current configuration path immediately
-     */
-    final inline fun <reified T> bindClassAtConfigRoot() {
-        bindClassAtConfigRoot(javaClass<T>())
+    final inline fun <reified T: Any> bindClassAtConfigPath(configPath: String, klass: Class<T>) {
+        bindClassAtConfigPath(configPath, fullType<T>())
     }
 
     /**
-     * bind a class at root of current configuration path, deferring binding until a module causes a load,
-     * or end of configuration chain
+     * bind a class bindings its values from the root of the current configuration path immediately
      */
-//    fun lazyBindClassAtConfigRoot(klass: Class<*>)
+    final inline fun <reified T: Any> bindClassAtConfigRoot() {
+        bindClassAtConfigRoot(fullType<T>())
+    }
 
     /**
      * bind a class bindings its values from the root of the current configuration path immediately
      */
-    fun bindClassAtConfigRoot(klass: Class<*>)
+    fun <T: Any> bindClassAtConfigRoot(klass: TypeReference<T>)
+
+    /**
+     * bind a class bindings its values from the root of the current configuration path immediately
+     */
+    final inline fun <reified T: Any> bindClassAtConfigRoot(klass: Class<T>) {
+        bindClassAtConfigRoot(fullType<T>())
+    }
 }
 
 /**

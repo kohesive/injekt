@@ -1,78 +1,96 @@
 package uy.kohesive.injekt.api
 
-import kotlin.reflect.KClass
+import java.lang.reflect.Type
 
+@suppress("NOTHING_TO_INLINE")
 public interface InjektRegistry {
-    public fun <T : Any> addSingleton(forClass: Class<T>, singleInstance: T)
-    public fun <R> addSingletonFactory(forClass: Class<R>, factoryCalledOnce: () -> R)
-    public fun <R> addFactory(forClass: Class<R>, factoryCalledEveryTime: () -> R)
-    public fun <R> addPerThreadFactory(forClass: Class<R>, factoryCalledOncePerThread: () -> R)
-    public fun <R, K> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKey: (K) -> R)
-    public fun <R, K> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, factoryCalledPerKeyPerThread: (K) -> R)
-    public fun <R : Any> addLoggerFactory(forLoggerClass: Class<R>, factoryByName: (String) -> R, factoryByClass: (Class<*>) -> R)
-    public fun <T> alias(existingRegisteredClass: Class<T>, otherClassesThatAreSame: List<Class<*>>)
-    public fun <T> hasFactory(forClass: Class<T>): Boolean
+    public final inline fun <reified T : Any> addSingleton(forClass: Class<T>, singleInstance: T) {
+        addSingleton(fullType<T>(), singleInstance)
+    }
 
-    public fun <T> getAddonMetadata(addon: String): T
-    public fun <T> setAddonMetadata(addon: String, metadata: T): T
+    public final inline fun <reified R: Any> addSingletonFactory(forClass: Class<R>, @noinline factoryCalledOnce: () -> R) {
+        addSingletonFactory(fullType<R>(), factoryCalledOnce)
+    }
+
+    public final inline fun <reified R: Any> addFactory(forClass: Class<R>, @noinline factoryCalledEveryTime: () -> R) {
+        addFactory(fullType<R>(), factoryCalledEveryTime)
+    }
+
+    public final inline fun <reified R: Any> addPerThreadFactory(forClass: Class<R>, @noinline factoryCalledOncePerThread: () -> R) {
+        addPerThreadFactory(fullType<R>(), factoryCalledOncePerThread)
+    }
+
+    public final inline fun <reified R: Any, reified K: Any> addPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, @noinline factoryCalledPerKey: (K) -> R) {
+        addPerKeyFactory(fullType<R>(), factoryCalledPerKey)
+    }
+
+    public final inline fun <reified R: Any, K: Any> addPerKeyFactory(forClass: Class<R>, @noinline factoryCalledPerKey: (K) -> R) {
+        addPerKeyFactory(fullType<R>(), factoryCalledPerKey)
+    }
+
+    public final inline fun <reified R: Any, reified K: Any> addPerThreadPerKeyFactory(forClass: Class<R>, forKeyClass: Class<K>, @noinline factoryCalledPerKeyPerThread: (K) -> R) {
+        addPerThreadPerKeyFactory(fullType<R>(), factoryCalledPerKeyPerThread)
+    }
+
+    public final inline fun <reified R: Any, reified K: Any> addPerThreadPerKeyFactory(forClass: Class<R>, @noinline factoryCalledPerKeyPerThread: (K) -> R) {
+        addPerThreadPerKeyFactory(fullType<R>(), factoryCalledPerKeyPerThread)
+    }
+
+    public final inline fun <reified R : Any> addLoggerFactory(forLoggerClass: Class<R>, @noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<Any>) -> R)  {
+        addLoggerFactory(fullType<R>(), factoryByName, factoryByClass)
+    }
+
+    public final inline fun <reified O: Any, reified T: O> addAlias(existingRegisteredClass: Class<T>, otherAncestorOrInterface: Class<O>) {
+        addAlias(fullType<T>(), fullType<O>())
+    }
+
+    public final inline fun <reified T: Any> hasFactory(forClass: Class<T>): Boolean {
+        return hasFactory(fullType<T>())
+    }
+
+    public final inline fun <reified T: Any> hasFactory(): Boolean {
+        return hasFactory(fullType<T>())
+    }
+
+    public fun <T : Any> addSingleton(forType: TypeReference<T>, singleInstance: T)
+    public fun <R: Any> addSingletonFactory(forType: TypeReference<R>, factoryCalledOnce: () -> R)
+    public fun <R: Any> addFactory(forType: TypeReference<R>, factoryCalledEveryTime: () -> R)
+    public fun <R: Any> addPerThreadFactory(forType: TypeReference<R>, factoryCalledOncePerThread: () -> R)
+    public fun <R: Any, K: Any> addPerKeyFactory(forType: TypeReference<R>, factoryCalledPerKey: (K) -> R)
+    public fun <R: Any, K: Any> addPerThreadPerKeyFactory(forType: TypeReference<R>, factoryCalledPerKeyPerThread: (K) -> R)
+    public fun <R : Any> addLoggerFactory(forLoggerType: TypeReference<R>, factoryByName: (String) -> R, factoryByClass: (Class<Any>) -> R)
+    public fun <O: Any, T: O> addAlias(existingRegisteredType: TypeReference<T>, otherAncestorOrInterface: TypeReference<O>)
+    public fun <T: Any> hasFactory(forType: TypeReference<T>): Boolean
 
     public final inline fun <reified T : Any> T.registerAsSingleton() {
-        addSingleton(this)
-    }
-
-    public final inline fun <reified R> KClass<R>.registerSingletonFactory(@noinline factoryCalledOnce: () -> R) {
-        addSingletonFactory(factoryCalledOnce)
-    }
-
-    public final inline fun <reified R> KClass<R>.registerFactory(@noinline factoryCalledEveryTime: () -> R) {
-        addFactory(factoryCalledEveryTime)
-    }
-
-    public final inline fun <reified R> KClass<R>.registerPerThreadFactory(@noinline factoryCalledOncePerThread: () -> R) {
-        addPerThreadFactory(factoryCalledOncePerThread)
-    }
-
-    public final inline fun <reified R, reified K> KClass<R>.registerPerKeyFactory(@noinline factoryCalledPerKey: (K) -> R) {
-        addPerKeyFactory(factoryCalledPerKey)
-    }
-
-    public final inline fun <reified R, reified K> KClass<R>.registerPerThreadPerKeyFactory(@noinline factoryCalledPerKeyPerThread: (K) -> R) {
-        addPerThreadPerKeyFactory(factoryCalledPerKeyPerThread)
-    }
-
-    public final inline fun <reified R> KClass<R>.registerLoggerFactory(@noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<*>) -> R) {
-        addLoggerFactory(factoryByName, factoryByClass)
-    }
-
-    public final inline fun <reified T : Any> T.aliasOthersToMe(classes: List<Class<*>>) {
-        alias(javaClass<T>(), classes)
+        addSingleton(fullType<T>(), this)
     }
 
     public final inline fun <reified T : Any> addSingleton(singleInstance: T) {
-        addSingleton(javaClass<T>(), singleInstance)
+        addSingleton(fullType<T>(), singleInstance)
     }
 
-    public final inline fun <reified R> addSingletonFactory(@noinline factoryCalledOnce: () -> R) {
-        addSingletonFactory(javaClass<R>(), factoryCalledOnce)
+    public final inline fun <reified R: Any> addSingletonFactory(@noinline factoryCalledOnce: () -> R) {
+        addSingletonFactory(fullType<R>(), factoryCalledOnce)
     }
 
-    public final inline fun <reified R> addFactory(@noinline factoryCalledEveryTime: () -> R) {
-        addFactory(javaClass<R>(), factoryCalledEveryTime)
+    public final inline fun <reified R: Any> addFactory(@noinline factoryCalledEveryTime: () -> R) {
+        addFactory(fullType<R>(), factoryCalledEveryTime)
     }
 
-    public final inline fun <reified R> addPerThreadFactory(@noinline factoryCalledOncePerThread: () -> R) {
-        addPerThreadFactory(javaClass<R>(), factoryCalledOncePerThread)
+    public final inline fun <reified R: Any> addPerThreadFactory(@noinline factoryCalledOncePerThread: () -> R) {
+        addPerThreadFactory(fullType<R>(), factoryCalledOncePerThread)
     }
 
-    public final inline fun <reified R, reified K> addPerKeyFactory(@noinline factoryCalledPerKey: (K) -> R) {
-        addPerKeyFactory(javaClass<R>(), javaClass<K>(), factoryCalledPerKey)
+    public final inline fun <reified R: Any, K: Any> addPerKeyFactory(@noinline factoryCalledPerKey: (K) -> R) {
+        addPerKeyFactory(fullType<R>(), factoryCalledPerKey)
     }
 
-    public final inline fun <reified R, reified K> addPerThreadPerKeyFactory(@noinline factoryCalledPerKeyPerThread: (K) -> R) {
-        addPerThreadPerKeyFactory(javaClass<R>(), javaClass<K>(), factoryCalledPerKeyPerThread)
+    public final inline fun <reified R: Any, K: Any> addPerThreadPerKeyFactory(@noinline factoryCalledPerKeyPerThread: (K) -> R) {
+        addPerThreadPerKeyFactory(fullType<R>(), factoryCalledPerKeyPerThread)
     }
 
-    public final inline fun <reified R> addLoggerFactory(@noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<*>) -> R) {
-        addLoggerFactory(javaClass<R>(), factoryByName, factoryByClass)
+    public final inline fun <reified R> addLoggerFactory(@noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<Any>) -> R) {
+        addLoggerFactory(fullType<R>(), factoryByName, factoryByClass)
     }
 }
