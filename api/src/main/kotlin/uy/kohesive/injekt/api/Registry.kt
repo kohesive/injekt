@@ -90,7 +90,7 @@ public interface InjektRegistry {
         addPerThreadPerKeyFactory(fullType<R>(), factoryCalledPerKeyPerThread)
     }
 
-    public final inline fun <reified R> addLoggerFactory(@noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<Any>) -> R) {
+    public final inline fun <reified R: Any> addLoggerFactory(@noinline factoryByName: (String) -> R, @noinline factoryByClass: (Class<Any>) -> R) {
         addLoggerFactory(fullType<R>(), factoryByName, factoryByClass)
     }
 }

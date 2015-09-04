@@ -131,4 +131,26 @@ public class TestGithub13 {
 
         assertEquals("Hi", Injekt.get(SomethingErased1::class.java).thing)
     }
+
+    @Test
+    public fun testBadGenerics() {
+        fun foo<T>(): SomethingErased1<T> = Injekt.get(fullType<SomethingErased1<T>>())
+
+        try {
+            Companion.scope.addSingleton(SomethingErased1::class.java, SomethingErased1("Hi"))
+            fail("Should have thrown an exception not accepting the value")
+        }
+        catch (ex: Throwable) {
+            println(ex)
+        }
+
+        try {
+            val something = foo<Int>()
+            fail("Should have thrown an exception not accepting the value")
+        }
+        catch (ex: Throwable) {
+            println(ex)
+        }
+
+    }
 }
