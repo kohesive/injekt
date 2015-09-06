@@ -2,11 +2,11 @@ package uy.kohesive.injekt.config.typesafe
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigRenderOptions
 import com.typesafe.config.ConfigResolveOptions
+import uy.klutter.json.jackson.module.kotlin.jacksonObjectMapper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.*
 import java.net.URI

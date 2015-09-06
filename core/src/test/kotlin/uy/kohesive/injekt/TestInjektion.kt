@@ -5,7 +5,6 @@ import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
-import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
