@@ -5,12 +5,11 @@ import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.platform.platformStatic
 
 
 class SmallApp {
     companion object : InjektMain() { // my app starts here with a static main()
-        platformStatic public fun main(args: Array<String>) {
+        @JvmStatic public fun main(args: Array<String>) {
             SmallApp().run()
         }
 

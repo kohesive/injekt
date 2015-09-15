@@ -1,6 +1,0 @@
-dependencies {
-    compile relativeProject(":injekt-api")
-    runtime relativeProject(":injekt-core")
-    compile "uy.klutter:klutter-config-typesafe-jdk6:$version_klutter"
-    compile "uy.klutter:klutter-json-jackson-jdk6:$version_klutter"
-}

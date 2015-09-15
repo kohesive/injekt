@@ -4,13 +4,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
-import kotlin.platform.platformStatic
-import kotlin.properties.Delegates
 
 class MyApp {
     companion object : InjektMain() {
         // my app starts here with a static main()
-        platformStatic public fun main(args: Array<String>) {
+        @JvmStatic public fun main(args: Array<String>) {
             MyApp().run()
         }
 
@@ -48,9 +46,9 @@ class MyApp {
     // === Ok, now let's use these factories ===
 
     // injections to properties can be delegates, we've added a bunch of extensions for inject now, lazy, and more
-    val log: Logger by Delegates.injectLogger()
-    val laziest: LazyDazy by Delegates.injectLazy()
-    val lessLazy: LazyDazy by Delegates.injectValue()
+    val log: Logger by injectLogger()
+    val laziest: LazyDazy by injectLazy()
+    val lessLazy: LazyDazy by injectValue()
 
     public fun run() {
         // even local variables can be injected, or rather "got"

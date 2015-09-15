@@ -34,7 +34,7 @@ class TestInjektion {
 
             // register the descendant class to be created, allow any ancestor classes to be used
             addSingleton(DescendantThing("family"))
-            addAlias(javaClass<DescendantThing>(), javaClass<AncestorThing>())
+            addAlias<DescendantThing, AncestorThing>()
 
             // logging is special!
             addLoggerFactory<MockLogger>({ name -> MockLogger(name,null) }, { klass -> MockLogger(null, klass) })
@@ -42,14 +42,14 @@ class TestInjektion {
     }
 
     // now we can inject using delegation in any class
-    val swm: SomethingSingleton by Delegates.injectValue()  // inject at instantiation
-    val many: ManyMultiples by Delegates.injectLazy() // inject when accessed
-    val many2: ManyMultiples by Delegates.injectLazy()
-    val worker: NotLazy by Delegates.injectLazy()
+    val swm: SomethingSingleton by injectValue()  // inject at instantiation
+    val many: ManyMultiples by injectLazy() // inject when accessed
+    val many2: ManyMultiples by injectLazy()
+    val worker: NotLazy by injectLazy()
 
-    val LOG: MockLogger by Delegates.injectLogger()
-    val LOG_BYNAME: MockLogger by Delegates.injectLogger("testy")
-    val LOG_BYCLASS: MockLogger by Delegates.injectLogger(javaClass<TestInjektion>())
+    val LOG: MockLogger by injectLogger()
+    val LOG_BYNAME: MockLogger by injectLogger("testy")
+    val LOG_BYCLASS: MockLogger by injectLogger(TestInjektion::class)
 
     @Test public fun testInjectedMembers() {
         assertEquals("Hi, I'm single", swm.name)
@@ -84,7 +84,7 @@ class TestInjektion {
     }
 
     @Test public fun testInjectionInMethodParameters() {
-        @data class ConstructedWithInjektion(val mySingleItem: SomethingSingleton = Injekt.get())
+        data class ConstructedWithInjektion(val mySingleItem: SomethingSingleton = Injekt.get())
 
         fun doSomething(myWorker: NotLazy = Injekt.get()) = myWorker.name
 
@@ -93,7 +93,7 @@ class TestInjektion {
     }
 
     @Test public fun testNestedInjection() {
-        @data class ConstructedInFactory(val mySingleItem: SomethingSingleton)
+        data class ConstructedInFactory(val mySingleItem: SomethingSingleton)
 
         Companion.scope.addSingletonFactory {  ConstructedInFactory(Injekt.get<SomethingSingleton>()) }
 

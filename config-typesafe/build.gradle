@@ -1,5 +1,0 @@
-dependencies {
-    runtime relativeProject(":injekt-api")
-    runtime relativeProject(":injekt-core")
-    runtime relativeProject(":injekt-config-typesafe-jdk8")
-}

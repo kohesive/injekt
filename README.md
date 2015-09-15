@@ -1,4 +1,4 @@
-[![Kotlin M12](https://img.shields.io/badge/Kotlin-M12%20%40%200.12.1230-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Join the chat at https://gitter.im/kohesive/injekt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kohesive/injekt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Kotlin M12](https://img.shields.io/badge/Kotlin-M13%20%40%200.13-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Join the chat at https://gitter.im/kohesive/injekt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kohesive/injekt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Injekt 
 
@@ -10,11 +10,11 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 ## Maven Dependnecy
 
-Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M12 versions `0.12.1218` or `0.12.1230`
+Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M13 versions `0.13.+`
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.4.+"
+compile "uy.kohesive.injekt:injekt-core:1.5.+"
 ```
 
 **Maven:**
@@ -22,7 +22,7 @@ compile "uy.kohesive.injekt:injekt-core:1.4.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.4.0,1.5.0)</version>
+    <version>[1.5.0,1.6.0)</version>
 </dependency>
 ```
 
@@ -34,11 +34,11 @@ At the earliest point in your application startup, you register singletons, fact
 class MyApp {
     companion object : InjektMain() {
         // my app starts here with a static main()
-        platformStatic public fun main(args: Array<String>) {
+        @JvmStatic public fun main(args: Array<String>) {
             MyApp().run()
         }
 
-        // the Injekt system will call me back here on a method I override.  And all my functions for registration are
+        // the InjektModule() will call me back here on a method I override.  And all my functions for registration are
         // easy to find on the receiver class
         override fun InjektRegistrar.registerInjectables() {
             // let's setup my logger first
@@ -76,9 +76,9 @@ class MyApp {
 And once they are registered, anything else in the system can access them, for example as class properties they can be injected using delegates:
 
 ```kotlin
-    val log: Logger by Delegates.injectLogger()
-    val laziest: LazyDazy by Delegates.injectLazy()
-    val lessLazy: LazyDazy by Delegates.injectValue()
+    val log: Logger by injectLogger()
+    val laziest: LazyDazy by injectLazy()
+    val lessLazy: LazyDazy by injectValue()
 ```
 
 or directly as assignments both as property declarations and local assignemtns:
@@ -150,19 +150,17 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 ## Generics, Erased Type and Injection
 
-All of the registry and injection methods try to retain full generic type information if it is available at the calling site to the compiler.
-This works for inferred types, and types you specify in the form of `someFunction<MyType<WithGenerics>>()`, and even if you pass in `javaClass<MyType<WithGenerics>>()`
--- and pass these to an Injekt method expecting a `Class<T>`.  The latter works since we actually ignore the `Class<T>`, and we look at what it is carrying: the reified `T`.
-
-Note that using Kotlin `MyClass::class.java` as the `Class<T>` parameter to Injekt methods will act as an erased raw type since Generic information is not available
-so any injection site must pass in the same style of class reference to the `get<T>` method.
+It is best to use type inference for all methods in Injekt to let the full type information come through to the system.  If the compiler can determine
+the types, it is likely the full generic information is captured.  But if a value passed to Injekt does not have that information available at the calling
+site, then you can specify the full generic type as a type parameter to the method, for example `Injekt.get<MyFullType<WithGenerics<AndMore>>>()`.  Methods also
+accept a `TypeReference<T>` which can be passed around as a means to parameterize and send type information through the system.  The helper method `fullType<T>()`
+can create a `TypeReference` for you, for example `Injekt.get(fullType<MyFullType<WithGenerics>>())`.
 
 It is preferable that you use (in priority order):
 
-* The inferred forms of Injekt functions that infer their type from the surrounding expression.
+* The inferred forms of Injekt functions that infer their type from the surrounding expression.  Do not provide a type unless something breaks.
 * Or if you want to change the type recognized by Injekt, use an explicit generic type for the function `someFunction<MyType>()`.
 * If those are not to your liking, then use the `TypeReference` version passing in a `typeRef<T>()` generated `TypeReference` ... this is your fallback in cases where things need full and exact control.
-* And if you must, you can use the `Class<T>` versions of the methods, but be careful of what can be inferred or not from the value passed in.  If `T` isn't obvious in the local scope to the compiler, things may work out differently than expected.
 
 By doing this, you prevent surprises because you are in full control and it is obvious what types are expected.
 

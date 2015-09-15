@@ -6,8 +6,9 @@ import uy.kohesive.injekt.api.fullType
 import uy.kohesive.injekt.registry.default.DefaultRegistrar
 import kotlin.properties.Delegates
 import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KClass
 
-public volatile var Injekt: InjektScope = InjektScope(DefaultRegistrar())
+public @Volatile var Injekt: InjektScope = InjektScope(DefaultRegistrar())
 
 /**
  * A class that startups up an system using Injekt, using the default global scope
@@ -16,12 +17,12 @@ public abstract class InjektMain : InjektScopedMain(Injekt)
 
 // top level Injekt scope
 
-@deprecated("use toplevel function injectLazy(): Lazy<T> instead")
+@Deprecated("use toplevel function injectLazy(): Lazy<T> instead")
 public inline fun <reified T: Any> Delegates.injectLazy(): ReadOnlyProperty<Any?, T> {
     return kotlin.properties.Delegates.lazy { Injekt.getInstance(fullType<T>()) }
 }
 
-@deprecated("use toplevel function injectValue(): Lazy<T> instead")
+@Deprecated("use toplevel function injectValue(): Lazy<T> instead")
 public inline fun <reified T: Any> Delegates.injectValue(): ReadOnlyProperty<Any?, T> {
     val value: T = Injekt.getInstance(fullType<T>())
     return object : ReadOnlyProperty<Any?, T> {
@@ -31,14 +32,14 @@ public inline fun <reified T: Any> Delegates.injectValue(): ReadOnlyProperty<Any
     }
 }
 
-@deprecated("use toplevel function injectLazy(key): Lazy<T> instead")
+@Deprecated("use toplevel function injectLazy(key): Lazy<T> instead")
 public inline fun <reified T: Any> Delegates.injectLazy(key: Any): ReadOnlyProperty<Any?, T> {
     return kotlin.properties.Delegates.lazy {
         Injekt.getKeyedInstance(fullType<T>(), key)
     }
 }
 
-@deprecated("use toplevel function injectValue(key): Lazy<T> instead")
+@Deprecated("use toplevel function injectValue(key): Lazy<T> instead")
 public inline fun <reified T: Any> Delegates.injectValue(key: Any): ReadOnlyProperty<Any?, T> {
     val value: T = Injekt.getKeyedInstance(fullType<T>(), key)
     return object : ReadOnlyProperty<Any?, T> {
@@ -48,7 +49,7 @@ public inline fun <reified T: Any> Delegates.injectValue(key: Any): ReadOnlyProp
     }
 }
 
-@deprecated("use toplevel function injectLogger(): Lazy<T> instead")
+@Deprecated("use toplevel function injectLogger(): Lazy<T> instead")
 public inline fun <reified R: Any, reified T: Any> Delegates.injectLogger(): ReadOnlyProperty<R, T> {
     val value: T = Injekt.getLogger(fullType<T>(), R::class.java)
     return object : ReadOnlyProperty<R, T> {
@@ -58,7 +59,7 @@ public inline fun <reified R: Any, reified T: Any> Delegates.injectLogger(): Rea
     }
 }
 
-@deprecated("use toplevel function injectLogger(forClass): Lazy<T> instead")
+@Deprecated("use toplevel function injectLogger(forClass): Lazy<T> instead")
 public inline fun <reified R: Any, reified T: Any, O: Any> Delegates.injectLogger(forClass: Class<O>): ReadOnlyProperty<R, T> {
     val value: T = Injekt.getLogger(fullType<T>(), forClass)
     return object : ReadOnlyProperty<R, T> {
@@ -68,7 +69,7 @@ public inline fun <reified R: Any, reified T: Any, O: Any> Delegates.injectLogge
     }
 }
 
-@deprecated("use toplevel function injectLogger(byName): Lazy<T> instead")
+@Deprecated("use toplevel function injectLogger(byName): Lazy<T> instead")
 public inline fun <reified R: Any, reified T: Any> Delegates.injectLogger(byName: String): ReadOnlyProperty<R, T> {
     val value: T = Injekt.getLogger(fullType<T>(), byName)
     return object : ReadOnlyProperty<R, T> {
@@ -99,11 +100,15 @@ public inline fun <reified R: Any, reified T: Any> R.injectLogger(): Lazy<T> {
     return lazy { Injekt.getLogger(fullType<T>(), R::class.java) }
 }
 
+public inline fun <reified T: Any, O: Any> injectLogger(forClass: KClass<O>): Lazy<T> {
+    return lazy { Injekt.getLogger(fullType<T>(), forClass.java) }
+}
+
 public inline fun <reified T: Any, O: Any> injectLogger(forClass: Class<O>): Lazy<T> {
     return lazy { Injekt.getLogger(fullType<T>(), forClass) }
 }
 
-public inline fun <reified R: Any, reified T: Any> injectLogger(byName: String): Lazy<T> {
+public inline fun <reified T: Any> injectLogger(byName: String): Lazy<T> {
     return lazy { Injekt.getLogger(fullType<T>(), byName) }
 }
 

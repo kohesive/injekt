@@ -1,15 +1,8 @@
 rootProject.name = "injekt"
 
 include 'api',
-        'core',
-        'config-typesafe',
-        'config-typesafe-jdk6',
-        'config-typesafe-jdk7',
-        'config-typesafe-jdk8'
+        'core'
 
 project(':api').name = 'injekt-api'
 project(':core').name = 'injekt-core'
-project(':config-typesafe').name = 'injekt-config-typesafe'
-project(':config-typesafe-jdk6').name = 'injekt-config-typesafe-jdk6'
-project(':config-typesafe-jdk7').name = 'injekt-config-typesafe-jdk7'
-project(':config-typesafe-jdk8').name = 'injekt-config-typesafe-jdk8'
+

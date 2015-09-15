@@ -9,7 +9,7 @@ import kotlin.properties.Delegates
 import kotlin.test.assertEquals
 
 public class TestGithub7 {
-    @data class Singleton(val count: Int)
+    data class Singleton(val count: Int)
 
     companion object : InjektMain() {
         val counter = AtomicInteger()
@@ -21,9 +21,9 @@ public class TestGithub7 {
         }
     }
 
-    public val first: Singleton by Delegates.injectValue()
-    public val second: Singleton by Delegates.injectValue()
-    public val third: Singleton by Delegates.injectValue()
+    public val first: Singleton by injectValue()
+    public val second: Singleton by injectValue()
+    public val third: Singleton by injectValue()
 
     @Test public fun testSingletonFactoryIsNotCalledMoreThanOnce() {
         assertEquals(1, counter.get())

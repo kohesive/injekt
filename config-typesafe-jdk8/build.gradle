@@ -1,8 +1,0 @@
-dependencies {
-    compile relativeProject(":injekt-api")
-    runtime relativeProject(":injekt-core")
-    compile relativeProject(":injekt-config-typesafe-jdk6")   // TODO: exclude uy.klutter:klutter-json-jackson-jdk6
-    compile relativeProject(":injekt-config-typesafe-jdk7")   // TODO: exclude uy.klutter:klutter-json-jackson-jdk6
-    compile "uy.klutter:klutter-config-typesafe-jdk8:$version_klutter"
-    compile "uy.klutter:klutter-json-jackson-jdk8:$version_klutter"
-}

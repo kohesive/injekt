@@ -6,7 +6,7 @@ import java.lang.reflect.*
 //       Kotlin MyClass::class.java does not create the same result as a class with generics does when reified.   Causes different
 //       results in the methods below.
 
-@suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 fun Type.erasedType(): Class<Any> {
     return when (this) {
         is Class<*> -> this as Class<Any>

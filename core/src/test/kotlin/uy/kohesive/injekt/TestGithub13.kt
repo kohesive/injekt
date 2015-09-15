@@ -7,12 +7,13 @@ import uy.kohesive.injekt.api.*
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.reflect.jvm.java
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.fail
 
 public class TestGithub13 {
+
+    // TODO: javaClass<T>() is deprecated so some of these paths should drop when we drop the Java Class accepting methods that are also deprecated here in Injekt
 
     open class Parser<T>(val name: String) {}
     class DescentParser(name: String): Parser<Array<Int>>(name)
