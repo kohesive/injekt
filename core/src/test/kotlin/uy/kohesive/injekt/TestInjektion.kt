@@ -6,10 +6,7 @@ import uy.kohesive.injekt.api.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import kotlin.properties.Delegates
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class MockLogger(name: String?, clazz: Class<*>?) {
     val result: String = name ?: clazz?.getName() ?: "!!error!!"
@@ -127,6 +124,19 @@ class TestInjektion {
 
     }
 
+    @Test public fun testDefaultedGet() {
+        val one = Injekt.getOrElse<NotExisting>(NotExisting("one"))
+        val two = Injekt.getOrElse<NotExisting>() { NotExisting("two") }
+        assertEquals("one", one.name)
+        assertEquals("two", two.name)
+
+        try {
+            val three = Injekt.get<NotExisting>()
+            fail("a get for non registered class should throw exception if not defaulted")
+        } catch (ex: InjektionException) {
+            // nop, expected
+        }
+    }
 }
 
 data class NotThreadSafeConnection(val whatThreadMadeMe: String)
@@ -135,6 +145,8 @@ data class KeyedThing(val name: String)
 
 open data class AncestorThing(val name: String)
 data class DescendantThing(name: String): AncestorThing(name)
+
+data class NotExisting(val name: String)
 
 
 // === code can make common things ready for injection in the best way possible, if these were other modules or packages

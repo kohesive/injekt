@@ -4,6 +4,7 @@
 
 * Moved Configuration injection to Klutter, it was too much of a circular dependency and belongs there with the rest of the typesafe configuration code.  See https://github.com/klutter/klutter config-typesafe modules.
 * Kotlin M13 support
+* Added injekt methods with allowed default values and lambdas, so that you can injekt if present in the registry, if not use a provided value.
 * BREAKING CHANGE:  dropped keyClass parameter from adding factories by key (not needed)
 * Deprecated everything that accepts a Java Class parameter is deprecated, because even though we can use tricks to pick up the reified generics and circumvent type erasure, we cannot do it in every path you might create a Java CLass reference, especially since `javaClass<T>()` is deprecated and people will switch to `MyClass::class.java` which loses all generic type info.  Instead use type inference if the variable type is clear to the compiler, otherwise use the type parameters to the methods or the `fullType<MyClass>()` function to generate a fully non erased generic type structure.
 * Deprecated all extensions on Delegates class, they are now top level functions to match Kotlin delegate lazy<T>()

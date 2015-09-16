@@ -40,7 +40,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     override public fun <T : Any> addSingleton(forType: TypeReference<T>, singleInstance: T) {
         addSingletonFactory(forType, { singleInstance })
-        getInstance<T>(forType) // load value into front cache
+        get<T>(forType) // load value into front cache
     }
 
     override public fun <R: Any> addSingletonFactory(forType: TypeReference<R>, factoryCalledOnce: () -> R) {
@@ -101,8 +101,33 @@ public open class DefaultRegistrar : InjektRegistrar {
     }
 
     @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any> getInstanceOrElse(forType: Type, default: R): R {
+        val factory = factories.getByKey(forType) ?: return default
+        return factory.invoke() as R
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any> getInstanceOrElse(forType: Type, default: ()->R): R {
+        val factory = factories.getByKey(forType) ?: return default()
+        return factory.invoke() as R
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
     override public fun <R: Any, K: Any> getKeyedInstance(forType: Type, key: K): R {
         val factory = keyedFactories.getByKey(forType) ?: throw InjektionException("No registered keyed factory for type ${forType}")
+        return factory.invoke(key) as R
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any, K: Any> getKeyedInstanceOrElse(forType: Type, key: K, default: R): R {
+        val factory = keyedFactories.getByKey(forType) ?: return default
+        return factory.invoke(key) as R
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any, K: Any> getKeyedInstanceOrElse(forType: Type, key: K, default: ()->R): R {
+        val factory = keyedFactories.getByKey(forType) ?: return default()
         return factory.invoke(key) as R
     }
 
