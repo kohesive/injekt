@@ -7,7 +7,7 @@ import java.lang.reflect.*
 //       results in the methods below.
 
 @Suppress("UNCHECKED_CAST")
-fun Type.erasedType(): Class<Any> {
+public fun Type.erasedType(): Class<Any> {
     return when (this) {
         is Class<*> -> this as Class<Any>
         is ParameterizedType -> this.getRawType().erasedType()

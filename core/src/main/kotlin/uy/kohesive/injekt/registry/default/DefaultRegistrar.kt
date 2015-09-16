@@ -15,7 +15,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     private val NOKEY = object {}
 
-    data class Instance(val forWhatType: Type, val forKey: Any)
+    internal data class Instance(val forWhatType: Type, val forKey: Any)
 
     // Get with type checked key
     private fun <K: Any, V: Any> Map<K,V>.getByKey(key: K): V? = get(key)
@@ -32,7 +32,7 @@ public open class DefaultRegistrar : InjektRegistrar {
 
     private val metadataForAddons = ConcurrentHashMap<String, Any>()
 
-    data class LoggerInfo(val forWhatType: Type, val nameFactory: (String) -> Any, val classFactory: (Class<Any>) -> Any)
+    internal data class LoggerInfo(val forWhatType: Type, val nameFactory: (String) -> Any, val classFactory: (Class<Any>) -> Any)
 
     private @Volatile var loggerFactory: LoggerInfo? = null
 
@@ -44,7 +44,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     }
 
     override public fun <R: Any> addSingletonFactory(forType: TypeReference<R>, factoryCalledOnce: () -> R) {
-        factories.put(forType.type, { existingValues.concurrentGetOrPutProxy(Instance(forType.type, NOKEY), { factoryCalledOnce() }) })
+        factories.put(forType.type, { existingValues.concurrentGetOrPut(Instance(forType.type, NOKEY), { factoryCalledOnce() }) })
     }
 
     override public fun <R: Any> addFactory(forType: TypeReference<R>, factoryCalledEveryTime: () -> R) {
@@ -60,7 +60,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     @Suppress("UNCHECKED_CAST")
     override public fun <R: Any, K: Any> addPerKeyFactory(forType: TypeReference<R>, factoryCalledPerKey: (K) -> R) {
         keyedFactories.put(forType.type, {  key ->
-            existingValues.concurrentGetOrPutProxy(Instance(forType.type, key), { factoryCalledPerKey(key as K) })
+            existingValues.concurrentGetOrPut(Instance(forType.type, key), { factoryCalledPerKey(key as K) })
         })
     }
 
@@ -95,13 +95,13 @@ public open class DefaultRegistrar : InjektRegistrar {
     // ==== Factory Methods ======================================================================
 
     @Suppress("UNCHECKED_CAST")
-    override fun <R: Any> getInstance(forType: Type): R {
+    override public fun <R: Any> getInstance(forType: Type): R {
         val factory = factories.getByKey(forType) ?: throw InjektionException("No registered instance or factory for type ${forType}")
         return factory.invoke() as R
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <R: Any, K: Any> getKeyedInstance(forType: Type, key: K): R {
+    override public fun <R: Any, K: Any> getKeyedInstance(forType: Type, key: K): R {
         val factory = keyedFactories.getByKey(forType) ?: throw InjektionException("No registered keyed factory for type ${forType}")
         return factory.invoke(key) as R
     }
@@ -115,13 +115,13 @@ public open class DefaultRegistrar : InjektRegistrar {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <R: Any> getLogger(expectedLoggerType: Type, byName: String): R {
+    override public fun <R: Any> getLogger(expectedLoggerType: Type, byName: String): R {
         assertLogger(expectedLoggerType)
         return loggerFactory!!.nameFactory(byName) as R   // if casting to wrong type, let it die with casting exception
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <R: Any, T: Any> getLogger(expectedLoggerType: Type, forClass: Class<T>): R {
+    override public fun <R: Any, T: Any> getLogger(expectedLoggerType: Type, forClass: Class<T>): R {
         assertLogger(expectedLoggerType)
         return loggerFactory!!.classFactory(forClass.erasedType()) as R  // if casting to wrong type, let it die with casting exception
     }

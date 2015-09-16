@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
 
-class MyApp {
+public class MyApp {
     companion object : InjektMain() {
         // my app starts here with a static main()
         @JvmStatic public fun main(args: Array<String>) {

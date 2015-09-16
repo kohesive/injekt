@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SmallApp {
+public class SmallApp {
     companion object : InjektMain() { // my app starts here with a static main()
         @JvmStatic public fun main(args: Array<String>) {
             SmallApp().run()
