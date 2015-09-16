@@ -146,7 +146,7 @@ When using a factory that is per-thread, be sure not to pass the object to other
 
 ## Injecting Configuration with Typesafe Config
 
-Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](config-typesafe/).
+Injekt + Klutter library can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [klutter/config-typesafe](https://github.com/klutter/klutter/tree/master/config-typesafe) module.
 
 ## Generics, Erased Type and Injection
 
