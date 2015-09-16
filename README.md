@@ -1,4 +1,4 @@
-[![Kotlin M12](https://img.shields.io/badge/Kotlin-M13%20%40%200.13-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Join the chat at https://gitter.im/kohesive/injekt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kohesive/injekt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Kotlin M12](https://img.shields.io/badge/Kotlin-M13%20%40%200.13.1513-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Join the chat at https://gitter.im/kohesive/injekt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kohesive/injekt?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Injekt 
 
@@ -10,7 +10,7 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 ## Maven Dependnecy
 
-Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M13 versions `0.13.+`
+Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M13 versions `0.13.x`
 
 **Gradle:**
 ```
