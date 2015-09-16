@@ -1,6 +1,6 @@
 ====
 
-2015-09-15 v1.5.0-M13-SNAPSHOT
+2015-09-15 v1.5.0
 
 * Moved Configuration injection to Klutter, it was too much of a circular dependency and belongs there with the rest of the typesafe configuration code.  See https://github.com/klutter/klutter config-typesafe modules.
 * Kotlin M13 support
