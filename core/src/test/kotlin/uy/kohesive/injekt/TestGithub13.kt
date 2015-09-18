@@ -25,12 +25,12 @@ public class TestGithub13 {
         val counter = AtomicInteger()
 
         override fun InjektRegistrar.registerInjectables() {
-            Parser<String>("one-string").registerAsSingleton()
-            Parser<Int>("one-int").registerAsSingleton()
+            addSingleton(Parser<String>("one-string"))
+            addSingleton(Parser<Int>("one-int"))
             addSingleton(Parser<Long>("one-long"))
             addSingleton<Parser<Double>>(Parser<Double>("one-double"))
 
-            Parser<Array<String>>("two-string").registerAsSingleton()
+            addSingleton(Parser<Array<String>>("two-string"))
             addSingleton(Parser<Array<Long>>("two-long"))
 
             addSingleton(DescentParser("two-int"))
@@ -38,12 +38,12 @@ public class TestGithub13 {
 
             addSingleton(DescentParserUnaliased("two-int-noalias"))
 
-            Parser<Map<String, List<String>>>("three-list-string").registerAsSingleton()
-            Parser<Map<String, List<Int>>>("three-list-int").registerAsSingleton()
-            Parser<Map<String, String>>("three-string").registerAsSingleton()
+            addSingleton(Parser<Map<String, List<String>>>("three-list-string"))
+            addSingleton(Parser<Map<String, List<Int>>>("three-list-int"))
+            addSingleton(Parser<Map<String, String>>("three-string"))
 
             val something = Parser<Map<String, Map<String, Any>>>("four-map-of-map-any")
-            something.registerAsSingleton()
+            addSingleton(something)
             val somethingElse = Parser<Map<String, Map<String, String>>>("four-map-of-map-string")
             addSingleton(fullType<Parser<Map<String, Map<String, String>>>>(), somethingElse)
 
@@ -58,8 +58,10 @@ public class TestGithub13 {
         val oneString: Parser<String> = Injekt.get()
         assertEquals("one-string", oneString.name)
         assertEquals("one-string", Injekt.get<Parser<String>>().name)
-        assertEquals("one-string", Injekt.getInstance(javaClass<Parser<String>>()).name)
-        assertEquals("one-string", Injekt.getInstance(fullType<Parser<String>>()).name)
+        assertEquals("one-string", Injekt.get(fullType<Parser<String>>()).name)
+
+        val oneStringAgain: Parser<String> = Injekt()
+        assertEquals("one-string", oneStringAgain.name)
 
         assertEquals("one-int", Injekt.get<Parser<Int>>().name)
         assertEquals("one-double", Injekt.get<Parser<Double>>().name)
@@ -114,22 +116,5 @@ public class TestGithub13 {
         } catch (ex: Throwable) {
             // pass
         }
-    }
-
-    data class SomethingErased1<T>(val thing: T)
-
-    @Test
-    public fun testUsingErasedClasses() {
-        Companion.scope.addSingleton(SomethingErased1::class.java, SomethingErased1("Hi"))
-
-        // doesn't exist at all
-        try {
-            val bad: SomethingErased1<String> = Injekt.get()
-            fail("Expecting a no factory exception")
-        } catch (ex: Throwable) {
-            // pass
-        }
-
-        assertEquals("Hi", Injekt.get(SomethingErased1::class.java).thing)
     }
 }

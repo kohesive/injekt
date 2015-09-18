@@ -12,9 +12,11 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M13 versions `0.13.x`
 
+(note, 1.6.0 has breaking changes and deprecations are all removed, read CHANGELOG.md before moving from 1.5.0)
+
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.5.+"
+compile "uy.kohesive.injekt:injekt-core:1.6.+"
 ```
 
 **Maven:**
@@ -22,7 +24,7 @@ compile "uy.kohesive.injekt:injekt-core:1.5.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.5.0,1.6.0)</version>
+    <version>[1.6.0,1.7.0)</version>
 </dependency>
 ```
 

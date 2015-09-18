@@ -1,11 +1,10 @@
 package uy.kohesive.injekt.tests
 
 import org.junit.Test
-import uy.kohesive.injekt.InjektMain
+import uy.kohesive.injekt.api.*
 import uy.kohesive.injekt.api.InjektRegistrar
-import uy.kohesive.injekt.injectValue
+import uy.kohesive.injekt.*
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.properties.Delegates
 import kotlin.test.assertEquals
 
 public class TestGithub7 {

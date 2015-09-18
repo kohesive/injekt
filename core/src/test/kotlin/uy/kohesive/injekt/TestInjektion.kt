@@ -1,5 +1,6 @@
 package uy.kohesive.injekt.tests
 
+import org.junit.Ignore
 import org.junit.Test
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
@@ -82,10 +83,12 @@ class TestInjektion {
 
     @Test public fun testInjectionInMethodParameters() {
         data class ConstructedWithInjektion(val mySingleItem: SomethingSingleton = Injekt.get())
+        data class Constructed2WithInjektion(val mySingleItem: SomethingSingleton = Injekt())
 
         fun doSomething(myWorker: NotLazy = Injekt.get()) = myWorker.name
 
         assertEquals("Hi, I'm single", ConstructedWithInjektion().mySingleItem.name)
+        assertEquals("Hi, I'm single", Constructed2WithInjektion().mySingleItem.name)
         assertEquals("Freddy", doSomething())
     }
 
@@ -121,8 +124,16 @@ class TestInjektion {
         assertNotEquals(one,two)
         val oneAgain = Injekt.get<KeyedThing>("one")
         assertEquals(one, oneAgain)
-
     }
+
+    @Ignore("M13 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211")
+    @Test public fun testGetWithBrackets() {
+        Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
+        val one = Injekt.get<KeyedThing>("one")
+        val twoAgain: KeyedThing = Injekt["two"]
+        assertNotEquals(one,twoAgain)
+    }
+
 
     @Test public fun testDefaultedGet() {
         val one = Injekt.getOrElse<NotExisting>(NotExisting("one"))
