@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 public @Volatile var Injekt: InjektScope = InjektScope(DefaultRegistrar())
 
 /**
- * A class that startups up an system using Injekt, using the default global scope
+ * A class that startups up a system using Injekt, using the default global scope
  */
 public abstract class InjektMain : InjektScopedMain(Injekt)
 
