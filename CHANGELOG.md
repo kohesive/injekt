@@ -3,11 +3,11 @@
 2015-09-15 v1.6.0
 
 * deprecated methods dropped, stay on 1.5.0 if you don't want to make code changes
-* BREAKING CHANGE:  some functions moved out of interface and into extension methods due to upcoming changes of dropping "final" and inline-able default methods in interfaces.  Probably a bad design choice to use them anyway, but you'll need spearate imports or import * to catch all the methods now.  Since they are inline functions (and/or because moved to extensions), you MUST recompile against the new version of the library.
+* BREAKING CHANGE:  some functions moved out of interface and into extension methods due to upcoming changes of dropping "final" and inline-able default methods in interfaces.  Probably a bad design choice to use them anyway, but you'll need separate imports or import * to catch all the methods now.  Since they are inline functions (and/or because moved to extensions), you MUST recompile against the new version of the library.
 * Added invoke() extension to factory, so you can now also inject using `val something: MyClass = Injekt()`
 * Be careful, calling Injekt["key"] or any of the inline `get(...)` functions with brackets, will crash in M13 https://youtrack.jetbrains.com/issue/KT-9211
 
-If you have odd compiler issues, check your imports for the extension functions.  Or set Injekt API to alway simport * in your IDE settings.  `import uy.kohesive.injekt.api.*`
+If you have odd compiler issues, check your imports for the extension functions.  Or set Injekt API to always import * in your IDE settings.  `import uy.kohesive.injekt.api.*`
 
 ====
 
