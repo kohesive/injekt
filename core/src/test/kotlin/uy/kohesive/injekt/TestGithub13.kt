@@ -90,6 +90,7 @@ public class TestGithub13 {
     public fun testDescendantsNotFound() {
         assertEquals("five-int", Injekt.get<Parser<Set<Int>>>().name)
         try {
+            @Suppress("UNUSED_VARIABLE")
             val bad: DescentParserSetInt = Injekt.get()
             fail("Expecting a no factory exception")
         } catch (ex: Throwable) {
@@ -98,6 +99,7 @@ public class TestGithub13 {
 
         assertEquals("five-long", Injekt.get<Parser<Set<Long>>>().name)
         try {
+            @Suppress("UNUSED_VARIABLE")
             val bad: DescentParserSetLong = Injekt.get()
             fail("Expecting a no factory exception")
         } catch (ex: Throwable) {
@@ -111,6 +113,7 @@ public class TestGithub13 {
 
         // doesn't exist at all
         try {
+            @Suppress("UNUSED_VARIABLE")
             val bad: Parser<Array<BigDecimal>> = Injekt.get()
             fail("Expecting a no factory exception")
         } catch (ex: Throwable) {

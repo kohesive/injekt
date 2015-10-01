@@ -1,5 +1,11 @@
 ====
 
+2015-10-01 v1.7.0
+
+* Upgraded to Kotlin M14 release
+
+====
+
 2015-09-15 v1.6.0
 
 * deprecated methods dropped, stay on 1.5.0 if you don't want to make code changes

@@ -54,7 +54,7 @@ class TestInjektion {
         assertEquals(swm, Injekt.get<SomethingSingleton>()) // ask for a value directly
         assertEquals("Freddy", worker.name)
         assertEquals(worker, Injekt.get<NotLazy>()) // should always get same singletons
-        assertTrue(worker.identityEquals( Injekt.get<NotLazy>()) ) // should always get same singletons
+        assertTrue(worker === Injekt.get<NotLazy>()) // should always get same singletons
 
         assertNotEquals(many.whenCreated, many2.whenCreated)
         assertNotEquals(Injekt.get<ManyMultiples>(), Injekt.get<ManyMultiples>())
@@ -67,7 +67,7 @@ class TestInjektion {
             Thread() {
                 val myThreadValue1 = Injekt.get<NotThreadSafeConnection>()
                 val myThreadValue2 = Injekt.get<NotThreadSafeConnection>()
-                assertTrue(myThreadValue1.identityEquals(myThreadValue2))
+                assertTrue(myThreadValue1 === myThreadValue2)
                 threadVals.add(myThreadValue1)
                 sync.countDown()
             }.start()
@@ -126,7 +126,7 @@ class TestInjektion {
         assertEquals(one, oneAgain)
     }
 
-    @Ignore("M13 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211")
+    @Ignore("M13 and M14 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211 ")
     @Test public fun testGetWithBrackets() {
         Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
         val one = Injekt.get<KeyedThing>("one")
@@ -142,6 +142,7 @@ class TestInjektion {
         assertEquals("two", two.name)
 
         try {
+            @Suppress("UNUSED_VARIABLE")
             val three = Injekt.get<NotExisting>()
             fail("a get for non registered class should throw exception if not defaulted")
         } catch (ex: InjektionException) {
@@ -154,8 +155,8 @@ data class NotThreadSafeConnection(val whatThreadMadeMe: String)
 data class NotLazy(val name: String)
 data class KeyedThing(val name: String)
 
-open data class AncestorThing(val name: String)
-data class DescendantThing(name: String): AncestorThing(name)
+open class AncestorThing(val name: String)
+class DescendantThing(name: String): AncestorThing(name)
 
 data class NotExisting(val name: String)
 
