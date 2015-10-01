@@ -23,7 +23,7 @@ public inline fun <R: Any> InjektFactory.get(forType: TypeReference<R>): R = get
 public inline fun <reified R: Any> InjektFactory.getOrElse(forType: TypeReference<R>, default: R): R = getInstanceOrElse(forType.type, default)
 public inline fun <reified R: Any> InjektFactory.getOrElse(forType: TypeReference<R>, noinline default: ()->R): R = getInstanceOrElse(forType.type, default)
 
-public inline fun <reified R: Any> InjektFactory.invoke(): R = getInstance(fullType<R>().type)
+public inline operator fun <reified R: Any> InjektFactory.invoke(): R = getInstance(fullType<R>().type)
 public inline fun <reified R: Any> InjektFactory.get(): R = getInstance(fullType<R>().type)
 public inline fun <reified R: Any> InjektFactory.getOrElse(default: R): R = getInstanceOrElse(fullType<R>().type, default)
 public inline fun <reified R: Any> InjektFactory.getOrElse(noinline default: ()->R): R = getInstanceOrElse(fullType<R>().type, default)
