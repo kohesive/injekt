@@ -1,5 +1,11 @@
 ====
 
+2015-10-06 v1.7.1
+
+* Upgraded to Kotlin 0.14.451
+
+====
+
 2015-10-01 v1.7.0
 
 * Upgraded to Kotlin M14 release
