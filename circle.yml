@@ -9,3 +9,9 @@ test:
     - ./gradlew jars
     - mkdir -p $CIRCLE_ARTIFACTS/libs/
     - find . -type f -regex ".*/build/libs/.*jar" -exec cp {} $CIRCLE_ARTIFACTS/libs/ \;
+
+deployment:
+  snapshots:
+      branch: [kotlin-snapshot]
+      commands:
+        - ./gradlew uploadArchives
