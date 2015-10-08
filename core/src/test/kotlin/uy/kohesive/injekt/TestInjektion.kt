@@ -74,7 +74,7 @@ class TestInjektion {
         }
         sync.await()
 
-        assertEquals(3, threadVals.size())
+        assertEquals(3, threadVals.size)
         val results = threadVals.toArrayList()
         assertNotEquals(results[0], results[1])
         assertNotEquals(results[0], results[2])
@@ -126,10 +126,11 @@ class TestInjektion {
         assertEquals(one, oneAgain)
     }
 
-    @Ignore("M13 and M14 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211 ")
+    @Ignore("M13 and M14 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211 ... or actually will never be allowed")
     @Test public fun testGetWithBrackets() {
         Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
         val one = Injekt.get<KeyedThing>("one")
+        @Suppress("OPERATOR_MODIFIER_REQUIRED")
         val twoAgain: KeyedThing = Injekt["two"]
         assertNotEquals(one,twoAgain)
     }
