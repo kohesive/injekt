@@ -15,5 +15,5 @@ public object AmazonS3InjektModule : InjektModule {
 
 private fun defaultCredentialsProviderChain(): AWSCredentialsProviderChain { return AWSCredentialsProviderChain() }
 
-data class AWSCredentialsProviderChain()
-data class AmazonS3Client(providerChain: AWSCredentialsProviderChain)
+class AWSCredentialsProviderChain()
+data class AmazonS3Client(val providerChain: AWSCredentialsProviderChain)
