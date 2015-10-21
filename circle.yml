@@ -12,6 +12,6 @@ test:
 
 deployment:
   snapshots:
-      branch: [kotlin-snapshot]
+      branch: [develop]
       commands:
         - ./gradlew uploadArchives
