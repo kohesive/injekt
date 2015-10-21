@@ -10,10 +10,10 @@ data class HttpServer(val host: String, val port: Int) {
 }
 
 
-data class DontCreateUntilWeNeedYa()
-data class LazyDazy()
-data class NamedPet(val name: String)
-data class KnownObject()
+class DontCreateUntilWeNeedYa()
+class LazyDazy()
+class NamedPet(val name: String)
+class KnownObject()
 
-data class DatabaseConnectionConfig(val host: String, username: String, password: String)
+data class DatabaseConnectionConfig(val host: String, val username: String, val password: String)
 data class JdbcDatabaseConnection(val cfg: DatabaseConnectionConfig)

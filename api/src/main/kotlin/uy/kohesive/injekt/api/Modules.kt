@@ -14,7 +14,7 @@ public abstract class InjektScopedMain(public val scope: InjektScope) : InjektMo
  * A package of injectable items that can be included into a scope of someone else
  */
 public interface InjektModule {
-    final fun registerWith(intoModule: InjektRegistrar) {
+    fun registerWith(intoModule: InjektRegistrar) {
         intoModule.registerInjectables()
     }
 
