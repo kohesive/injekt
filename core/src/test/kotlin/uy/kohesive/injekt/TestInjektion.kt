@@ -141,7 +141,9 @@ class TestInjektion {
         val two = Injekt.getOrElse<NotExisting>() { NotExisting("two") }
         assertEquals("one", one.name)
         assertEquals("two", two.name)
+    }
 
+    @Test public fun testUnregistgeredTypeException() {
         try {
             @Suppress("UNUSED_VARIABLE")
             val three = Injekt.get<NotExisting>()
@@ -149,6 +151,11 @@ class TestInjektion {
         } catch (ex: InjektionException) {
             // nop, expected
         }
+    }
+
+    @Test public fun testNullGet() {
+        val one = Injekt.getOrNull<NotExisting>() ?: NotExisting("one")
+        assertEquals("one", one.name)
     }
 }
 

@@ -1,5 +1,12 @@
 ====
 
+2015-10-06 v1.8.0
+
+* Upgraded to Kotlin 1.0.0 ABI
+* added getOrNull varations of methods
+
+====
+
 2015-10-06 v1.7.1
 
 * Upgraded to Kotlin 0.14.451
