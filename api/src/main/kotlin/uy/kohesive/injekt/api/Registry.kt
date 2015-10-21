@@ -12,11 +12,6 @@ public interface InjektRegistry {
     public fun <R : Any> addLoggerFactory(forLoggerType: TypeReference<R>, factoryByName: (String) -> R, factoryByClass: (Class<Any>) -> R)
     public fun <O: Any, T: O> addAlias(existingRegisteredType: TypeReference<T>, otherAncestorOrInterface: TypeReference<O>)
     public fun <T: Any> hasFactory(forType: TypeReference<T>): Boolean
-
-    @Deprecated("To be removed, no replacement since it will invade all code completion lists if moved outside of interface")
-    public final inline fun <reified T : Any> T.registerAsSingleton() {
-        addSingleton(fullType<T>(), this)
-    }
 }
 
 public inline fun <reified T: Any> InjektRegistry.hasFactory(): Boolean {

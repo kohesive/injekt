@@ -112,6 +112,12 @@ public open class DefaultRegistrar : InjektRegistrar {
         return factory.invoke() as R
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any> getInstanceOrNull(forType: Type): R? {
+        val factory = factories.getByKey(forType) ?: return null
+        return factory.invoke() as R
+    }
+
 
     @Suppress("UNCHECKED_CAST")
     override public fun <R: Any, K: Any> getKeyedInstance(forType: Type, key: K): R {
@@ -128,6 +134,12 @@ public open class DefaultRegistrar : InjektRegistrar {
     @Suppress("UNCHECKED_CAST")
     override public fun <R: Any, K: Any> getKeyedInstanceOrElse(forType: Type, key: K, default: ()->R): R {
         val factory = keyedFactories.getByKey(forType) ?: return default()
+        return factory.invoke(key) as R
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override public fun <R: Any, K: Any> getKeyedInstanceOrNull(forType: Type, key: K): R? {
+        val factory = keyedFactories.getByKey(forType) ?: return null
         return factory.invoke(key) as R
     }
 

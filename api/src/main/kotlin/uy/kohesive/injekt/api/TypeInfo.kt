@@ -32,7 +32,7 @@ public interface TypeReference<T> {
 }
 
 public abstract class FullTypeReference<T> protected constructor() : TypeReference<T> {
-    override public val type: Type = javaClass.getGenericSuperclass() let { superClass ->
+    override public val type: Type = javaClass.getGenericSuperclass().let { superClass ->
         if (superClass is Class<*>) {
             throw IllegalArgumentException("Internal error: TypeReference constructed without actual type information")
         }

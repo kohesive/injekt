@@ -1,4 +1,4 @@
-[![Kotlin M14](https://img.shields.io/badge/Kotlin-M14%20%40%200.14.451-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.0.0--beta--1038-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
 # Injekt 
 
@@ -10,11 +10,11 @@ Injekt can also load, bind to objects, and inject configuration using Typesafe C
 
 ## Maven Dependnecy
 
-Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin M14 versions `0.14.x`
+Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin 1.0.0 (BETA)
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.7.+"
+compile "uy.kohesive.injekt:injekt-core:1.8.+"
 ```
 
 **Maven:**
@@ -22,7 +22,7 @@ compile "uy.kohesive.injekt:injekt-core:1.7.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.7.0,1.8.0)</version>
+    <version>[1.8.0,1.9.0)</version>
 </dependency>
 ```
 
