@@ -6,7 +6,7 @@ Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can
 
 Injekt is NOT inversion of control.  It is NOT some mystical class file manipulator.  It is NOT complex.  But it IS powerful.
 
-Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](https://github.com/klutter/klutter/tree/master/config-typesafe).
+Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](https://github.com/kohesive/klutter/tree/master/config-typesafe).
 
 ## Maven Dependnecy
 
@@ -146,7 +146,7 @@ When using a factory that is per-thread, be sure not to pass the object to other
 
 ## Injecting Configuration with Typesafe Config
 
-Injekt + Klutter library can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [klutter/config-typesafe](https://github.com/klutter/klutter/tree/master/config-typesafe) module.
+Injekt + Klutter library can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [klutter/config-typesafe](https://github.com/kohesive/klutter/tree/master/config-typesafe) module.
 
 ## Generics, Erased Type and Injection
 
@@ -175,7 +175,7 @@ By doing this, you prevent surprises because you are in full control and it is o
 Other libraries that we recommend a building blocks for Kotlin applications:
 
 * [Kovenant](http://kovenant.komponents.nl) - promises for Kotlin, easy, fun, and async! (JVM / Android)
-* [Klutter](http://github.com/klutter) - simple, small, useful things for Kotlin
+* [Klutter](http://github.com/kohesive/klutter) - simple, small, useful things for Kotlin
 
 ## With help from...
 
