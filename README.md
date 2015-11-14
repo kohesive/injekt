@@ -2,7 +2,7 @@
 
 # Injekt 
 
-Injekt is a crazyily easy **Dependency Injection** for Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
+Injekt gives you crazy easy **Dependency Injection** in Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
 
 Injekt is NOT inversion of control.  It is NOT some mystical class file manipulator.  It is NOT complex.  But it IS powerful.
 
