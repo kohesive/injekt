@@ -14,7 +14,7 @@ Include the dependency in your Gradle / Maven projects, ones that have Kotlin co
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.8.+"
+compile "uy.kohesive.injekt:injekt-core:1.10.+"
 ```
 
 **Maven:**
@@ -22,7 +22,7 @@ compile "uy.kohesive.injekt:injekt-core:1.8.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.8.0,1.9.0)</version>
+    <version>[1.10.0,1.11.0)</version>
 </dependency>
 ```
 
