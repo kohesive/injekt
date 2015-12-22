@@ -1,6 +1,12 @@
 ====
 
-2015-12-08 v1.8.4 (and version 1.9.0 is same release, but renumbered)
+2015-12-22 v1.10.0
+
+* Upgraded to Kotlin 1.0.0-beta-4583
+
+====
+
+2015-12-08 v1.9.0 (and version 1.8.4 is same release)
 
 * Upgraded to Kotlin 1.0.0-beta-3595
 

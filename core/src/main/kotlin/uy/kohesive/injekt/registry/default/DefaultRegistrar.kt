@@ -44,7 +44,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     }
 
     override public fun <R: Any> addSingletonFactory(forType: TypeReference<R>, factoryCalledOnce: () -> R) {
-        factories.put(forType.type, { existingValues.concurrentGetOrPut(Instance(forType.type, NOKEY), { factoryCalledOnce() }) })
+        factories.put(forType.type, { existingValues.getOrPut(Instance(forType.type, NOKEY), { factoryCalledOnce() }) })
     }
 
     override public fun <R: Any> addFactory(forType: TypeReference<R>, factoryCalledEveryTime: () -> R) {
@@ -60,7 +60,7 @@ public open class DefaultRegistrar : InjektRegistrar {
     @Suppress("UNCHECKED_CAST")
     override public fun <R: Any, K: Any> addPerKeyFactory(forType: TypeReference<R>, factoryCalledPerKey: (K) -> R) {
         keyedFactories.put(forType.type, {  key ->
-            existingValues.concurrentGetOrPut(Instance(forType.type, key), { factoryCalledPerKey(key as K) })
+            existingValues.getOrPut(Instance(forType.type, key), { factoryCalledPerKey(key as K) })
         })
     }
 

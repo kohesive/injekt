@@ -79,6 +79,7 @@ subprojects {
         provided "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
 
         testCompile "junit:junit:$version_junit"
+        testCompile "org.jetbrains.kotlin:kotlin-test:$version_kotlin"
         testCompile "org.slf4j:slf4j-api:$version_slf4j"
         // testCompile "org.jetbrains.kotlin:kotlin-reflect:$version_kotlin"
         testRuntime "ch.qos.logback:logback-classic:$version_logback"
