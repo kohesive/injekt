@@ -1,5 +1,11 @@
 ====
 
+2015-12-30 v1.10.1
+
+* Upgraded to Kotlin 1.0.0-beta-4584
+
+====
+
 2015-12-22 v1.10.0
 
 * Upgraded to Kotlin 1.0.0-beta-4583
