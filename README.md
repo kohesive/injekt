@@ -57,6 +57,9 @@ class MyApp {
             // or give me a new one each time it is injected
             addFactory { LazyDazy() }
 
+            // or use extension functions on classes that are visible while in this lambda
+            KnownObject().registerAsSingleton()
+
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
             addPerKeyFactory { petName: String -> pets.get(petName)!! }
