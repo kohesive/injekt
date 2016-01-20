@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-1.0.0--beta--4584-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.0.0--beta--4589-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
 # Injekt 
 
@@ -14,7 +14,7 @@ Include the dependency in your Gradle / Maven projects, ones that have Kotlin co
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.10.+"
+compile "uy.kohesive.injekt:injekt-core:1.11.+"
 ```
 
 **Maven:**
@@ -22,7 +22,7 @@ compile "uy.kohesive.injekt:injekt-core:1.10.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.10.0,1.11.0)</version>
+    <version>[1.11.0,1.12.0)</version>
 </dependency>
 ```
 
@@ -56,9 +56,6 @@ class MyApp {
 
             // or give me a new one each time it is injected
             addFactory { LazyDazy() }
-
-            // or use extension functions on classes that are visible while in this lambda
-            KnownObject().registerAsSingleton()
 
             // and we also have factories that use a key (or single parameter) to return an instance
             val pets = listOf(NamedPet("Bongo"), NamedPet("Dancer"), NamedPet("Cheetah")).map { it.name to it}.toMap()
