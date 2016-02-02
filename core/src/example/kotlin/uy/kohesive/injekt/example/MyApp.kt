@@ -5,10 +5,10 @@ import org.slf4j.LoggerFactory
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
 
-public class MyApp {
+class MyApp {
     companion object : InjektMain() {
         // my app starts here with a static main()
-        @JvmStatic public fun main(args: Array<String>) {
+        @JvmStatic fun main(args: Array<String>) {
             MyApp().run()
         }
 
@@ -47,14 +47,14 @@ public class MyApp {
     val laziest: LazyDazy by injectLazy()
     val lessLazy: LazyDazy by injectValue()
 
-    public fun run() {
+    fun run() {
         // even local variables can be injected, or rather "got"
         val something = Injekt.get<DontCreateUntilWeNeedYa>()
         startHttpServer()
     }
 
     // and we can inject into methods by using Kotlin default parameters
-    public fun startHttpServer(httpCfg: HttpServerConfig = Injekt.get()) {
+    fun startHttpServer(httpCfg: HttpServerConfig = Injekt.get()) {
         log.debug("HTTP Server starting on ${httpCfg.host}:${httpCfg.port}")
         HttpServer(httpCfg.host, httpCfg.port).withThreads(httpCfg.workerThreads).handleRequest { context ->
             val db: JdbcDatabaseConnection = Injekt.get()    // we have a connection per thread now!

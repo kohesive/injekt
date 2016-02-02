@@ -4,7 +4,7 @@ import uy.kohesive.injekt.api.*
 
 // our module exports an injectable singletone for an Amazon S3 client, perfectly configured!
 
-public object AmazonS3InjektModule : InjektModule {
+object AmazonS3InjektModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory { AmazonS3Client(defaultCredentialsProviderChain()) }
     }

@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-public class SmallApp {
+class SmallApp {
     companion object : InjektMain() { // my app starts here with a static main()
         @JvmStatic public fun main(args: Array<String>) {
             SmallApp().run()
@@ -18,7 +18,7 @@ public class SmallApp {
         }
     }
 
-    public fun run(dateFormatter: SimpleDateFormat = Injekt.get()) {
+    fun run(dateFormatter: SimpleDateFormat = Injekt.get()) {
         System.out.println("I survived the date formatting!!! ${dateFormatter.format(Date())}")
     }
 }

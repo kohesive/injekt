@@ -1,3 +1,19 @@
+2016-02-02 v1.12.0-RC-1025
+
+* Upgraded to Kotlin 1.0.0-rc-1025
+
+====
+
+2016-01-20 v1.11
+
+* Upgraded to Kotlin 1.0.0-beta-4589
+
+====
+
+2015-12-30 v1.10.1
+
+* Upgraded to Kotlin 1.0.0-beta-4584
+
 ====
 
 2016-01-20 v1.11
