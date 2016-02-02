@@ -7,7 +7,7 @@ import uy.kohesive.injekt.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals
 
-public class TestGithub7 {
+class TestGithub7 {
     data class Singleton(val count: Int)
 
     companion object : InjektMain() {
@@ -20,11 +20,11 @@ public class TestGithub7 {
         }
     }
 
-    public val first: Singleton by injectValue()
-    public val second: Singleton by injectValue()
-    public val third: Singleton by injectValue()
+    val first: Singleton by injectValue()
+    val second: Singleton by injectValue()
+    val third: Singleton by injectValue()
 
-    @Test public fun testSingletonFactoryIsNotCalledMoreThanOnce() {
+    @Test fun testSingletonFactoryIsNotCalledMoreThanOnce() {
         assertEquals(1, counter.get())
         assertEquals(1, first.count)
         assertEquals(1, second.count)

@@ -4,14 +4,12 @@ import org.junit.Test
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.*
-import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.test.fail
 
-public class TestGithub13 {
+class TestGithub13 {
 
     // TODO: javaClass<T>() is deprecated so some of these paths should drop when we drop the Java Class accepting methods that are also deprecated here in Injekt
 
@@ -54,7 +52,7 @@ public class TestGithub13 {
     }
 
     @Test
-    public fun testWithGenerics() {
+    fun testWithGenerics() {
         val oneString: Parser<String> = Injekt.get()
         assertEquals("one-string", oneString.name)
         assertEquals("one-string", Injekt.get<Parser<String>>().name)
@@ -87,7 +85,7 @@ public class TestGithub13 {
     }
 
     @Test
-    public fun testDescendantsNotFound() {
+    fun testDescendantsNotFound() {
         assertEquals("five-int", Injekt.get<Parser<Set<Int>>>().name)
         try {
             @Suppress("UNUSED_VARIABLE")
@@ -109,7 +107,7 @@ public class TestGithub13 {
     }
 
     @Test
-    public fun testDoesNotExistWithGenericType() {
+    fun testDoesNotExistWithGenericType() {
 
         // doesn't exist at all
         try {

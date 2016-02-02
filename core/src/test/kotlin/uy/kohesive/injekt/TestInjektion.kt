@@ -1,12 +1,10 @@
 package uy.kohesive.injekt.tests
 
-import org.junit.Ignore
 import org.junit.Test
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
-import kotlin.properties.Delegates
 import kotlin.test.*
 
 class MockLogger(name: String?, clazz: Class<*>?) {
@@ -49,7 +47,7 @@ class TestInjektion {
     val LOG_BYNAME: MockLogger by injectLogger("testy")
     val LOG_BYCLASS: MockLogger by injectLogger(TestInjektion::class)
 
-    @Test public fun testInjectedMembers() {
+    @Test fun testInjectedMembers() {
         assertEquals("Hi, I'm single", swm.name)
         assertEquals(swm, Injekt.get<SomethingSingleton>()) // ask for a value directly
         assertEquals("Freddy", worker.name)
@@ -60,7 +58,7 @@ class TestInjektion {
         assertNotEquals(Injekt.get<ManyMultiples>(), Injekt.get<ManyMultiples>())
     }
 
-    @Test public fun testInjectionOfThreadSingletons() {
+    @Test fun testInjectionOfThreadSingletons() {
         val sync = CountDownLatch(3)
         val threadVals = ConcurrentLinkedQueue<NotThreadSafeConnection>()
         for (i in 0..2) {
@@ -75,13 +73,13 @@ class TestInjektion {
         sync.await()
 
         assertEquals(3, threadVals.size)
-        val results = threadVals.toArrayList()
+        val results = threadVals.toList()
         assertNotEquals(results[0], results[1])
         assertNotEquals(results[0], results[2])
         assertNotEquals(results[1], results[2])
     }
 
-    @Test public fun testInjectionInMethodParameters() {
+    @Test fun testInjectionInMethodParameters() {
         data class ConstructedWithInjektion(val mySingleItem: SomethingSingleton = Injekt.get())
         data class Constructed2WithInjektion(val mySingleItem: SomethingSingleton = Injekt())
 
@@ -92,7 +90,7 @@ class TestInjektion {
         assertEquals("Freddy", doSomething())
     }
 
-    @Test public fun testNestedInjection() {
+    @Test fun testNestedInjection() {
         data class ConstructedInFactory(val mySingleItem: SomethingSingleton)
 
         Companion.scope.addSingletonFactory {  ConstructedInFactory(Injekt.get<SomethingSingleton>()) }
@@ -100,12 +98,12 @@ class TestInjektion {
         assertEquals("Hi, I'm single", Injekt.get<ConstructedInFactory>().mySingleItem.name)
     }
 
-    @Test public fun testAnyDescendantLevel() {
+    @Test fun testAnyDescendantLevel() {
         assertEquals("family", Injekt.get<DescendantThing>().name)
         assertEquals("family", Injekt.get<AncestorThing>().name)
     }
 
-    @Test public fun testLogging() {
+    @Test fun testLogging() {
         assertNotNull(LOG)
         assertEquals("uy.kohesive.injekt.tests.TestInjektion", LOG.result)
         assertNotNull(LOG_BYNAME)
@@ -117,7 +115,7 @@ class TestInjektion {
         assertEquals("uy.kohesive.injekt.tests.NotLazy", Injekt.logger<MockLogger>(NotLazy("asd")).result)
     }
 
-    @Test public fun testKeyedInjection() {
+    @Test fun testKeyedInjection() {
         Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
         val one = Injekt.get<KeyedThing>("one")
         val two = Injekt.get<KeyedThing>("two")
@@ -126,8 +124,7 @@ class TestInjektion {
         assertEquals(one, oneAgain)
     }
 
-    @Ignore("M13 and M14 bug, broken.  see: https://youtrack.jetbrains.com/issue/KT-9211 ... or actually will never be allowed")
-    @Test public fun testGetWithBrackets() {
+    @Test fun testGetWithBrackets() {
         Companion.scope.addPerKeyFactory { key: String -> KeyedThing("$key - ${System.currentTimeMillis()}") }
         val one = Injekt.get<KeyedThing>("one")
         @Suppress("OPERATOR_MODIFIER_REQUIRED")
@@ -136,14 +133,14 @@ class TestInjektion {
     }
 
 
-    @Test public fun testDefaultedGet() {
+    @Test fun testDefaultedGet() {
         val one = Injekt.getOrElse<NotExisting>(NotExisting("one"))
         val two = Injekt.getOrElse<NotExisting>() { NotExisting("two") }
         assertEquals("one", one.name)
         assertEquals("two", two.name)
     }
 
-    @Test public fun testUnregistgeredTypeException() {
+    @Test fun testUnregistgeredTypeException() {
         try {
             @Suppress("UNUSED_VARIABLE")
             val three = Injekt.get<NotExisting>()
@@ -153,7 +150,7 @@ class TestInjektion {
         }
     }
 
-    @Test public fun testNullGet() {
+    @Test fun testNullGet() {
         val one = Injekt.getOrNull<NotExisting>() ?: NotExisting("one")
         assertEquals("one", one.name)
     }
