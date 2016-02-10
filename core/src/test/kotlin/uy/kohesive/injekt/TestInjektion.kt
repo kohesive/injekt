@@ -206,18 +206,6 @@ class TestInjektion {
             val globalThing: DescendantThing by injectValue()
         }
 
-        open class LocalScoped(protected val scope: InjektScope) {
-            public inline fun <reified T: Any> injectLazy(): Lazy<T> {
-                return scope.injectLazy<T>()
-            }
-
-            public inline fun <reified T: Any> injectValue(): Lazy<T> {
-                return scope.injectValue<T>()
-            }
-
-            // TODO: implement any others you want to override to NOT call the global, keyed, logger, ...
-        }
-
         class MyController(scope: InjektScope): LocalScoped(scope) {
             val notLazy: NotLazy by injectLazy()
             val globalThing: DescendantThing by injectValue()

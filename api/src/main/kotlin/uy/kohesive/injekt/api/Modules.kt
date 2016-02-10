@@ -4,7 +4,7 @@ package uy.kohesive.injekt.api
 /**
  *  A startup module that registers and uses singletons/object factories from a specific scope
  */
-public abstract class InjektScopedMain(public val scope: InjektScope) : InjektModule {
+abstract class InjektScopedMain(val scope: InjektScope) : InjektModule {
     init {
         scope.registrar.registerInjectables()
     }
@@ -13,7 +13,7 @@ public abstract class InjektScopedMain(public val scope: InjektScope) : InjektMo
 /**
  * A package of injectable items that can be included into a scope of someone else
  */
-public interface InjektModule {
+interface InjektModule {
     fun registerWith(intoModule: InjektRegistrar) {
         intoModule.registerInjectables()
     }

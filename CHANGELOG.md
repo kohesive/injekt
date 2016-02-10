@@ -1,3 +1,17 @@
+2016-02-10 v1.13.0-RC-1050 (only to binTray)
+
+* Added scoped factory methods to `InjektScope` to help with Github #32
+* Added `LocalScoped` class to help in using a local scope delegates
+* POSSIBLE BREAKING CHANGE: Moved `InjektScope` extensions into `InjektScope` so that additional imports are not needed
+
+===
+
+2016-02-09 v1.12.0-RC-1050 (only to binTray)
+
+* Upgraded to Kotlin 1.0.0-rc-1050
+
+===
+
 2016-02-04 v1.12.0-RC-1036
 
 * Upgraded to Kotlin 1.0.0-rc-1036

@@ -1,7 +1,7 @@
 package uy.kohesive.injekt.api
 
-public interface InjektRegistrar: InjektRegistry, InjektFactory  {
-    public fun importModule(submodule: InjektModule) {
+interface InjektRegistrar: InjektRegistry, InjektFactory  {
+    fun importModule(submodule: InjektModule) {
         submodule.registerWith(this)
     }
 }
