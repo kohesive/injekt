@@ -192,6 +192,8 @@ class MyActivityScope: InjektScope(DefaultRegistrar()) {
     init {
         // override with local value
         addSingletonFactory { SomeSingletonClass() }
+        // import other registrations from defined modules
+        importModule(OtherModuleWithPrepackagedInjektions)
         // delegate to global scope:
         addSingletonFactory { Injekt.get<SomeOtherSingleton>() }
     }
@@ -205,14 +207,14 @@ val singly: SomeSingletonClass = localScope.get()
 val other: SomeOtherSingleton = localScope.get()
 ```
 
-Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, allowing you to import other modules as well.  For example:
+Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, if you prefer to be consistent with modules.  For example:
 
 ```
 class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
     override fun InjektRegistrar.registerInjectables() {
         // override with local value
         addSingletonFactory { NotLazy("Freddy") }
-        // import other registrations
+        // import other registrations from defined modules
         importModule(OtherModuleWithPrepackagedInjektions)
         // delegate to global scope:
         addSingletonFactory { Injekt.get<SomeOtherSingleton>() }
