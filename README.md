@@ -1,6 +1,6 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.0.0--rc--1036-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
-# Injekt 
+# Injekt
 
 Injekt gives you crazy easy **Dependency Injection** in Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
 
@@ -135,7 +135,9 @@ The only difference between an `InjektMain` and `InjektModule` object is that a 
 importModule(AmazonS3InjektModule)
 ```
 
-Note:  if you extend `InjektMain` you are also a module that can be imported.  But beware that if you use scopes (see `InjektScope` and `InjektScopeMain` then you should not use `InjektMain` which will always import into the global scope).  More on scopes in a future release, not intended to be used yet.
+Note:  if you extend `InjektMain` you are also a module that can be imported.  
+
+Note:  If you use scopes (see `InjektScope` and `InjektScopeMain` then you should be aware that using `InjektMain` points at the global scope always).
 
 ## One Instance Per-Thread Factories -- a tip
 
@@ -161,9 +163,31 @@ It is preferable that you use (in priority order):
 
 By doing this, you prevent surprises because you are in full control and it is obvious what types are expected.
 
+## Scopes
+
+Injekt allows manual scoping of instances into separate Injekt registries.  The global registry, avaialble through the `Injekt` variable is just one scope that is precreated for you.  You can also create new ones:
+
+```
+val myLocalScope: InjektScope = InjektScope(DefaultRegistrar())
+```
+
+This makes a standalone scope that has no relationship to the global or to others.  But then you can link scopes by creating factories in the new scope that delegate some of the instance creation to another scope, or the global `Injekt` scope.  For example:
+
+```
+// delegate some factories to global Injekt instance
+myLocalScope.registerSingletonFactory { Injekt.get<SomeSingletonClass>() }
+myLocalScope.registerFactory { Injekt.get<SomeMultiValueClass>() }
+```
+
+When delegating factories such as this, any multi-value instances will not be cached by either since those factories create new instances on every call.  For singletons and keyed factories the objects are cached and a reference to those objects will exist in both the delegated scope and the local scope for any requested during its lifecycle.  
+
+To clear a local scope, just drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
+
+For more advanced, and more automatic scope linking / delegation / inheritance, please see issue #31 and provide comments.
+
 ## Coming soon... (RoadMap)
 
-* More about scopes
+* Linked Scopes, see #31
 * Materializing object graphs without explicit calls to Injekt
 * Tell me what you would like to see, add Issues here in Github with requests.
 
