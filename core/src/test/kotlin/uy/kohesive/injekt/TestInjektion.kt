@@ -3,6 +3,7 @@ package uy.kohesive.injekt.tests
 import org.junit.Test
 import uy.kohesive.injekt.*
 import uy.kohesive.injekt.api.*
+import uy.kohesive.injekt.registry.default.DefaultRegistrar
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import kotlin.test.*
@@ -153,6 +154,88 @@ class TestInjektion {
     @Test fun testNullGet() {
         val one = Injekt.getOrNull<NotExisting>() ?: NotExisting("one")
         assertEquals("one", one.name)
+    }
+
+    @Test fun testScopeDescendant() {
+        class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
+            override fun InjektRegistrar.registerInjectables() {
+                // override with local value
+                addSingletonFactory { NotLazy("Happy Dancer") }
+                // import other registrations
+                importModule(OtherModuleWithPrepackagedInjektions)
+                // delegate to global scope:
+                addSingletonFactory { Injekt.get<DescendantThing>() }
+            }
+        }
+
+        val myActivityModule = MyActivityModule().scope
+
+        assertEquals("Happy Dancer", myActivityModule.get<NotLazy>().name)
+        assertEquals("family", myActivityModule.get<DescendantThing>().name)
+        assertEquals("Hi, I'm single", myActivityModule.get<SomethingSingleton>().name)
+
+        val x = object {
+            val localScope = MyActivityModule().scope
+            val notLazy: NotLazy by localScope.injectValue()
+        }
+
+        assertEquals("Happy Dancer", x.notLazy.name)
+
+        class MyActivityScope : InjektScope(DefaultRegistrar()) {
+            init {
+                // override with local value
+                addSingletonFactory { NotLazy("Happy Runner") }
+                // import other registrations
+                importModule(OtherModuleWithPrepackagedInjektions)
+                // delegate to global scope:
+                addSingletonFactory { Injekt.get<DescendantThing>() }
+            }
+        }
+
+        val myActivityScope = MyActivityScope()
+
+        assertEquals("Happy Runner", myActivityScope.get<NotLazy>().name)
+        assertEquals("family", myActivityScope.get<DescendantThing>().name)
+        assertEquals("Hi, I'm single", myActivityScope.get<SomethingSingleton>().name)
+    }
+
+    @Test fun testScopedFactories() {
+
+        open class LocalScoped(protected val scope: InjektScope) {
+            public inline fun <reified T: Any> injectLazy(): Lazy<T> {
+                return scope.injectLazy<T>()
+            }
+
+            public inline fun <reified T: Any> injectValue(): Lazy<T> {
+                return scope.injectValue<T>()
+            }
+
+            // TODO: implement any others you want to override to NOT call the global, keyed, logger, ...
+        }
+
+        class MyController(scope: InjektScope): LocalScoped(scope) {
+            val something: NotLazy by injectLazy()
+        }
+
+        class MyActivityScope : InjektScope(DefaultRegistrar()) {
+            init {
+                addScopedSingletonFactory { MyController(this) }
+            }
+        }
+
+        class MyActivity(): LocalScoped(MyActivityScope()) {
+            val other: DescendantThing by injectValue()
+            val controller: MyController by injectValue()
+        }
+
+        assertEquals("family", MyActivity().other.name)
+        assertEquals("Happy Dancer", MyActivity().controller.something.name)
+    }
+
+    inline fun <reified R: Any> InjektScope.addScopedSingletonFactory(noinline scopedFactoryCalledOnce: InjektScope.() -> R) {
+        addSingletonFactory(fullType<R>()) {
+            this.scopedFactoryCalledOnce()
+        }
     }
 }
 
