@@ -183,7 +183,32 @@ When delegating factories such as this, any multi-value instances will not be ca
 
 You can also just use multiple scopes independently without linking or delegation.  Some instances from a local scope, others from the global.  But you must call the correct scope instead of just using the `Injekt` global variable.
 
-If you have common factories needed in local scopes, you can easily create a descendent of `InjektScope` that registers during its construction.  Or a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }` to do the same.
+If you have common factories needed in local scopes, you can easily create a descendent of `InjektScope` that registers during its construction.  
+
+```
+class MyActivityScope: InjektScope(DefaultRegistrar()) {
+    init {
+        addSingletonFactory { SomeSingletonClass() }
+    }
+}
+
+// then in each place you want a local scope
+val localScope = MyActivityScope()
+```
+
+Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, allowing you to import other modules as well.  For example:
+
+```
+class MyActivityScope: InjektScopedMain(InjektScope(DefaultRegistrar())) {
+    override fun InjektRegistrar.registerInjectables() {
+        addSingletonFactory { NotLazy("Freddy") }
+        importModule(OtherModuleWithPrepackagedInjektions)
+    }
+}
+
+// then in each place you want a local scope
+val localScope = MyActivityScope().scope
+```
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
