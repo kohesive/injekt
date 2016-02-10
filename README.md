@@ -188,7 +188,10 @@ If you have common factories needed in local scopes, you can easily create a des
 ```
 class MyActivityScope: InjektScope(DefaultRegistrar()) {
     init {
+        // override with local value
         addSingletonFactory { SomeSingletonClass() }
+        // delegate to global scope:
+        addSingletonFactory { Injekt.get<SomeOtherSingleton>() }
     }
 }
 
@@ -201,8 +204,12 @@ Or using the same model as `InjektMain` create a descendent of `InjektScopedMain
 ```
 class MyActivityScope: InjektScopedMain(InjektScope(DefaultRegistrar())) {
     override fun InjektRegistrar.registerInjectables() {
+        // override with local value
         addSingletonFactory { NotLazy("Freddy") }
+        // import other registrations
         importModule(OtherModuleWithPrepackagedInjektions)
+        // delegate to global scope:
+        addSingletonFactory { Injekt.get<SomeOtherSingleton>() }
     }
 }
 
