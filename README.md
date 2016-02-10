@@ -181,7 +181,9 @@ myLocalScope.registerFactory { Injekt.get<SomeMultiValueClass>() }
 
 When delegating factories such as this, any multi-value instances will not be cached by either since those factories create new instances on every call.  For singletons and keyed factories the objects are cached and a reference to those objects will exist in both the delegated scope and the local scope for any requested during its lifecycle.  
 
-To clear a local scope, just drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
+You can also just use multiple scopes independently without linking or delegation.  Some instances from a local scope, others from the global.  But you must call the correct scope instead of just using the `Injekt` global variable.
+
+To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
 For more advanced, and more automatic scope linking / delegation / inheritance, please see issue #31 and provide comments.
 
