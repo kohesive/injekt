@@ -171,7 +171,9 @@ Injekt allows manual scoping of instances into separate Injekt registries.  The 
 val myLocalScope: InjektScope = InjektScope(DefaultRegistrar())
 ```
 
-This makes a standalone scope that has no relationship to the global or to others.  But then you can link scopes by creating factories in the new scope that delegate some of the instance creation to another scope, or the global `Injekt` scope.  For example:
+This makes a standalone scope that has no relationship to the global or to others.  
+
+But then you can link scopes by creating factories in the new scope that delegate some of the instance creation to another scope, or the global `Injekt` scope.  For example:
 
 ```
 // delegate some factories to global Injekt instance
@@ -181,7 +183,7 @@ myLocalScope.addFactory { Injekt.get<SomeMultiValueClass>() }
 
 When delegating factories such as this, any multi-value instances will not be cached by any scope since those factories create new instances on every call.  For singletons and keyed factories the objects are cached and a reference to those objects will exist in both the local and delegated scopes for any instances requested during its lifecycle.  
 
-You can also just use multiple scopes independently without linking or delegation.  Some instances from a local scope, others from the global.  But you must use each scope independently instead of only using the `Injekt` global variable
+You can also just use multiple scopes independently without linking or delegation.  Fetch some instances from a local scope, others from the global.  But you must use each scope independently and be careful of accidentally using the `Injekt` global variable when not intended.
 
 If you have common factories needed in local scopes, you can easily create a descendent of `InjektScope` that registers these during its construction.  
 
@@ -226,6 +228,8 @@ And you can still use delegated properties, as long as the scope is declared bef
 ```
 val myProp: SomeClass by localScope.injectValue()
 ```
+
+And in your base class for your activity, you could add helper functions that look like the global `injectValue()` or `injectLazy()` functions but rather use the local scope.  This way your syntax stays consistent.
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
