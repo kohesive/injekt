@@ -221,6 +221,12 @@ class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
 val localScope = MyActivityModule().scope
 ```
 
+And you can still use delegated properties, as long as the scope is declared before use in the delegate:
+
+```
+val myProp: SomeClass by localScope.injectValue()
+```
+
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
 For more advanced, and more automatic scope linking / delegation / inheritance, please see issue [#31](https://github.com/kohesive/injekt/issues/31) and provide comments.
