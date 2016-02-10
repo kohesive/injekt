@@ -201,6 +201,11 @@ class TestInjektion {
 
     @Test fun testScopedFactories() {
 
+        class MyThing(scope: InjektScope) {
+            val notLazy: NotLazy by injectLazy()
+            val globalThing: DescendantThing by injectValue()
+        }
+
         open class LocalScoped(protected val scope: InjektScope) {
             public inline fun <reified T: Any> injectLazy(): Lazy<T> {
                 return scope.injectLazy<T>()
@@ -216,12 +221,14 @@ class TestInjektion {
         class MyController(scope: InjektScope): LocalScoped(scope) {
             val notLazy: NotLazy by injectLazy()
             val globalThing: DescendantThing by injectValue()
+            val thing: MyThing by injectValue()
         }
 
         class MyActivityScope : InjektScope(DefaultRegistrar()) {
             init {
                 // things that share my local scope, use our custom extension function
                 addScopedSingletonFactory { MyController(this) }
+                addScopedFactory { MyThing(this) }
                 // local registrations
                 addSingletonFactory { NotLazy("Happy Runner") }
                 // import other registrations
@@ -235,6 +242,7 @@ class TestInjektion {
             val globalThing: DescendantThing by injectLazy()
             val notLazy: NotLazy by injectValue()
             val controller: MyController by injectValue()
+            val thing: MyThing by injectValue()
         }
 
         val activity = MyActivity()
@@ -242,15 +250,14 @@ class TestInjektion {
         assertEquals("family", activity.globalThing.name)
         assertEquals("Happy Runner", activity.controller.notLazy.name)
         assertEquals("family", activity.controller.globalThing.name)
+
+        assertTrue(activity.notLazy === activity.controller.notLazy, "Instances should be the same for singletons")
+        assertTrue(activity.globalThing === activity.controller.globalThing,  "Instances should be the same for singletons")
+
+        assertTrue(activity.thing !== activity.controller.thing, "Multi value factory instances should all be unique")
+
     }
 
-}
-
-
-inline fun <reified R: Any> InjektScope.addScopedSingletonFactory(noinline scopedFactoryCalledOnce: InjektScope.() -> R) {
-    addSingletonFactory(fullType<R>()) {
-        this.scopedFactoryCalledOnce()
-    }
 }
 
 data class NotThreadSafeConnection(val whatThreadMadeMe: String)

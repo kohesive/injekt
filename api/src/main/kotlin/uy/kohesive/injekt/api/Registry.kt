@@ -47,3 +47,4 @@ public inline fun <reified R: Any> InjektRegistry.addLoggerFactory(noinline fact
 }
 
 public inline fun <reified EXISTINGREGISTERED: ANCESTORTYPE, reified ANCESTORTYPE: Any> InjektRegistry.addAlias() = addAlias(fullType<EXISTINGREGISTERED>(), fullType<ANCESTORTYPE>())
+
