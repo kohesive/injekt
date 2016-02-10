@@ -235,11 +235,12 @@ And in your base class for your activity, you could add helper functions that lo
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
-For more advanced, and more automatic scope linking / delegation / inheritance, please see issue [#31](https://github.com/kohesive/injekt/issues/31) and provide comments.
+For more advanced, and more automatic scope linking / delegation / inheritance, please see issue [#31](https://github.com/kohesive/injekt/issues/31) and provide comments.  For propagating a scope into other classes injected into the class declaring the local scope, see the test case referenced from [#32](https://github.com/kohesive/injekt/issues/32)
 
 ## Coming soon... (RoadMap)
 
 * Linked Scopes, see [#31](https://github.com/kohesive/injekt/issues/31)
+* Scoped factories, see [#32](https://github.com/kohesive/injekt/issues/32)
 * Materializing object graphs without explicit calls to Injekt
 * Tell me what you would like to see, add Issues here in Github with requests.
 
