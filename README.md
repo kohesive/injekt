@@ -231,7 +231,7 @@ And you can still use delegated properties, as long as the scope is declared bef
 val myProp: SomeClass by localScope.injectValue()
 ```
 
-And in your base class for your activity, you could add helper functions that look like the global `injectValue()` or `injectLazy()` functions but rather use the local scope.  This way your syntax stays consistent.
+And in your base class for your activity, you could add helper functions that look like the global `injectValue()` or `injectLazy()` functions but rather use the local scope (see [example](https://github.com/kohesive/injekt/blob/f7ae7b491b6452d31bd3102e009210c2c6c99fad/core/src/test/kotlin/uy/kohesive/injekt/TestInjektion.kt#L202-L254)).  This way your syntax stays consistent.
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
