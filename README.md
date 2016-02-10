@@ -185,11 +185,11 @@ You can also just use multiple scopes independently without linking or delegatio
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
 
-For more advanced, and more automatic scope linking / delegation / inheritance, please see issue #31 and provide comments.
+For more advanced, and more automatic scope linking / delegation / inheritance, please see issue [#31](https://github.com/kohesive/injekt/issues/31) and provide comments.
 
 ## Coming soon... (RoadMap)
 
-* Linked Scopes, see #31
+* Linked Scopes, see [#31](https://github.com/kohesive/injekt/issues/31)
 * Materializing object graphs without explicit calls to Injekt
 * Tell me what you would like to see, add Issues here in Github with requests.
 
