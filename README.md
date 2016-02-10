@@ -165,7 +165,7 @@ By doing this, you prevent surprises because you are in full control and it is o
 
 ## Scopes
 
-Injekt allows manual scoping of instances into separate Injekt registries.  The global registry, avaialble through the `Injekt` variable is just one scope that is precreated for you.  You can also create new ones:
+Injekt allows manual scoping of instances into separate Injekt registries.  The global registry, available through the `Injekt` variable is just one scope that is pre-created for you.  You can also create new ones:
 
 ```
 val myLocalScope: InjektScope = InjektScope(DefaultRegistrar())
@@ -179,11 +179,11 @@ myLocalScope.addSingletonFactory { Injekt.get<SomeSingletonClass>() }
 myLocalScope.addFactory { Injekt.get<SomeMultiValueClass>() }
 ```
 
-When delegating factories such as this, any multi-value instances will not be cached by either since those factories create new instances on every call.  For singletons and keyed factories the objects are cached and a reference to those objects will exist in both the delegated scope and the local scope for any requested during its lifecycle.  
+When delegating factories such as this, any multi-value instances will not be cached by any scope since those factories create new instances on every call.  For singletons and keyed factories the objects are cached and a reference to those objects will exist in both the local and delegated scopes for any instances requested during its lifecycle.  
 
-You can also just use multiple scopes independently without linking or delegation.  Some instances from a local scope, others from the global.  But you must call the correct scope instead of just using the `Injekt` global variable.
+You can also just use multiple scopes independently without linking or delegation.  Some instances from a local scope, others from the global.  But you must use each scope independently instead of only using the `Injekt` global variable
 
-If you have common factories needed in local scopes, you can easily create a descendent of `InjektScope` that registers during its construction.  
+If you have common factories needed in local scopes, you can easily create a descendent of `InjektScope` that registers these during its construction.  
 
 ```
 class MyActivityScope: InjektScope(DefaultRegistrar()) {
@@ -197,6 +197,10 @@ class MyActivityScope: InjektScope(DefaultRegistrar()) {
 
 // then in each place you want a local scope
 val localScope = MyActivityScope()
+
+// later use the scope
+val singly: SomeSingletonClass = localScope.get()
+val other: SomeOtherSingleton = localScope.get()
 ```
 
 Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, allowing you to import other modules as well.  For example:
