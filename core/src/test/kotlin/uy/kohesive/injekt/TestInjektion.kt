@@ -214,28 +214,42 @@ class TestInjektion {
         }
 
         class MyController(scope: InjektScope): LocalScoped(scope) {
-            val something: NotLazy by injectLazy()
+            val notLazy: NotLazy by injectLazy()
+            val globalThing: DescendantThing by injectValue()
         }
 
         class MyActivityScope : InjektScope(DefaultRegistrar()) {
             init {
+                // things that share my local scope, use our custom extension function
                 addScopedSingletonFactory { MyController(this) }
+                // local registrations
+                addSingletonFactory { NotLazy("Happy Runner") }
+                // import other registrations
+                importModule(OtherModuleWithPrepackagedInjektions)
+                // delegate to global scope:
+                addSingletonFactory { Injekt.get<DescendantThing>() }
             }
         }
 
         class MyActivity(): LocalScoped(MyActivityScope()) {
-            val other: DescendantThing by injectValue()
+            val globalThing: DescendantThing by injectLazy()
+            val notLazy: NotLazy by injectValue()
             val controller: MyController by injectValue()
         }
 
-        assertEquals("family", MyActivity().other.name)
-        assertEquals("Happy Dancer", MyActivity().controller.something.name)
+        val activity = MyActivity()
+        assertEquals("Happy Runner", activity.notLazy.name)
+        assertEquals("family", activity.globalThing.name)
+        assertEquals("Happy Runner", activity.controller.notLazy.name)
+        assertEquals("family", activity.controller.globalThing.name)
     }
 
-    inline fun <reified R: Any> InjektScope.addScopedSingletonFactory(noinline scopedFactoryCalledOnce: InjektScope.() -> R) {
-        addSingletonFactory(fullType<R>()) {
-            this.scopedFactoryCalledOnce()
-        }
+}
+
+
+inline fun <reified R: Any> InjektScope.addScopedSingletonFactory(noinline scopedFactoryCalledOnce: InjektScope.() -> R) {
+    addSingletonFactory(fullType<R>()) {
+        this.scopedFactoryCalledOnce()
     }
 }
 
