@@ -202,7 +202,7 @@ val localScope = MyActivityScope()
 Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, allowing you to import other modules as well.  For example:
 
 ```
-class MyActivityScope: InjektScopedMain(InjektScope(DefaultRegistrar())) {
+class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
     override fun InjektRegistrar.registerInjectables() {
         // override with local value
         addSingletonFactory { NotLazy("Freddy") }
@@ -214,7 +214,7 @@ class MyActivityScope: InjektScopedMain(InjektScope(DefaultRegistrar())) {
 }
 
 // then in each place you want a local scope
-val localScope = MyActivityScope().scope
+val localScope = MyActivityModule().scope
 ```
 
 To clear a local scope, drop your reference to the scope and it will garabage collect away.  There is no explicit clear method.
