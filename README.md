@@ -26,13 +26,6 @@ compile "uy.kohesive.injekt:injekt-core:2.0.+"
 </dependency>
 ```
 
-It is recommended you set your IDE to auto import `*` for Injekt packages (if your IDE supports such a feature):
-
-```
-import uy.kohesive.injekt.*
-import uy.kohesive.injekt.api.*
-```
-
 ## Injekt "Main"
 
 At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the `InjektModule` on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/example/src/main/kotlin/uy/kohesive/injekt/example/MyApp.kt))
