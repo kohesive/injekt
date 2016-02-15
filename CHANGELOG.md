@@ -1,3 +1,13 @@
+2016-02-15 v2.0.0
+
+* Kotlin 1.0.0
+* Factory and Registry interface extensions are replicated into the InjektScope class for findability in the IDE, almost never would they be used outside due to no other registry/factory implementations.
+* BREAKING CHANGE: InjektRegistry interface is no longer used for modules, instead InjektScope.  Therefore, use of module code must change from `InjektRegistrar.registerInjectables` to `InjektScope.registerInjectables`.  An IDE intention will replace the class and import on option-enter.
+
+With these changes, fewer imports need to be guessed at or needed.
+
+===
+
 2016-02-10 v1.13.0-RC-1050 (only to binTray)
 
 * Added scoped factory methods to `InjektScope` to help with Github #32

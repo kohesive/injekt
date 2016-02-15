@@ -19,7 +19,7 @@ class TestInjektion {
             // your static main.  Or the first class it creates.
         // }
 
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             // import other prepackaged injections
             importModule(OtherModuleWithPrepackagedInjektions)
             importModule(ExtraModuleWithInjektions)
@@ -158,7 +158,7 @@ class TestInjektion {
 
     @Test fun testScopeDescendant() {
         class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
-            override fun InjektRegistrar.registerInjectables() {
+            override fun InjektScope.registerInjectables() {
                 // override with local value
                 addSingletonFactory { NotLazy("Happy Dancer") }
                 // import other registrations
@@ -262,7 +262,7 @@ data class NotExisting(val name: String)
 //     they have defined some importable injections:
 
 object OtherModuleWithPrepackagedInjektions: InjektModule {
-    override fun InjektRegistrar.registerInjectables() {
+    override fun InjektScope.registerInjectables() {
         // lazy factory for singleton
         addSingletonFactory { SomethingSingleton("Hi, I'm single") }
     }
@@ -273,7 +273,7 @@ data class SomethingSingleton(val name: String)
 // === and more...
 
 object ExtraModuleWithInjektions : InjektModule {
-    override fun InjektRegistrar.registerInjectables() {
+    override fun InjektScope.registerInjectables() {
         // factory for new instance per use
         addFactory { ManyMultiples() }
     }

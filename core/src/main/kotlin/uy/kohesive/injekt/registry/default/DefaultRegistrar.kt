@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
  * in a write little, read many model.  Which is exactly our model.  This stores the factories and the resulting instances
  * for cases that keep them around (Singletons, Per Key instances, Per Thread instances)
  */
+@Suppress("DEPRECATION")
 open class DefaultRegistrar : InjektRegistrar {
     private enum class FactoryType { SINGLETON, MULTI, MULTIKEYED, THREAD, THREADKEYED }
 

@@ -22,7 +22,7 @@ class TestGithub13 {
     companion object : InjektMain() {
         val counter = AtomicInteger()
 
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             addSingleton(Parser<String>("one-string"))
             addSingleton(Parser<Int>("one-int"))
             addSingleton(Parser<Long>("one-long"))
