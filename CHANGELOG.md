@@ -9,6 +9,12 @@ With these changes, fewer imports need to be guessed at or needed.
 
 ===
 
+2016-02-15 v1.14.0
+
+* Kotlin 1.0.0
+
+===
+
 2016-02-10 v1.13.0-RC-1050 (only to binTray)
 
 * Added scoped factory methods to `InjektScope` to help with Github #32
