@@ -6,7 +6,7 @@ package uy.kohesive.injekt.api
  */
 abstract class InjektScopedMain(val scope: InjektScope) : InjektModule {
     init {
-        scope.registrar.registerInjectables()
+        scope.registerInjectables()
     }
 }
 
@@ -14,11 +14,11 @@ abstract class InjektScopedMain(val scope: InjektScope) : InjektModule {
  * A package of injectable items that can be included into a scope of someone else
  */
 interface InjektModule {
-    fun registerWith(intoModule: InjektRegistrar) {
-        intoModule.registerInjectables()
+    fun registerWith(intoScope: InjektScope) {
+        intoScope.registerInjectables()
     }
 
-    fun InjektRegistrar.registerInjectables()
+    fun InjektScope.registerInjectables()
 }
 
 

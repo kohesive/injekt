@@ -2,7 +2,6 @@ package uy.kohesive.injekt.tests
 
 import org.junit.Test
 import uy.kohesive.injekt.api.*
-import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals
@@ -13,7 +12,7 @@ class TestGithub7 {
     companion object : InjektMain() {
         val counter = AtomicInteger()
 
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             addSingletonFactory {
                 Singleton(counter.incrementAndGet())
             }

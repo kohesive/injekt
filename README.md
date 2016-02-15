@@ -14,7 +14,7 @@ Include the dependency in your Gradle / Maven projects, ones that have Kotlin co
 
 **Gradle:**
 ```
-compile "uy.kohesive.injekt:injekt-core:1.16.+"
+compile "uy.kohesive.injekt:injekt-core:2.0.+"
 ```
 
 **Maven:**
@@ -22,15 +22,8 @@ compile "uy.kohesive.injekt:injekt-core:1.16.+"
 <dependency>
     <groupId>uy.kohesive.injekt</groupId>
     <artifactId>injekt-core</artifactId>
-    <version>[1.16.0,1.17.0)</version>
+    <version>[2.0.0,2.1.0)</version>
 </dependency>
-```
-
-It is recommended you set your IDE to auto import `*` for Injekt packages (if your IDE supports such a feature):
-
-```
-import uy.kohesive.injekt.*
-import uy.kohesive.injekt.api.*
 ```
 
 ## Injekt "Main"
@@ -47,7 +40,7 @@ class MyApp {
 
         // the InjektModule() will call me back here on a method I override.  And all my functions for registration are
         // easy to find on the receiver class
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             // let's setup my logger first
             addLoggerFactory({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
 
@@ -129,7 +122,7 @@ Now that you have mastered injections, let's make modules of our application pro
 
 ```kotlin
 public object AmazonS3InjektModule : InjektModule {
-    override fun InjektRegistrar.registerInjectables() {
+    override fun InjektScope.registerInjectables() {
         addSingletonFactory { AmazonS3Client(defaultCredentialsProviderChain()) }
     }
 }
@@ -214,11 +207,11 @@ val singly: SomeSingletonClass = localScope.get()
 val other: SomeOtherSingleton = localScope.get()
 ```
 
-Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektRegistrar.registerInjectables() { ... }`, if you prefer to be consistent with modules.  For example:
+Or using the same model as `InjektMain` create a descendent of `InjektScopedMain` that overrides function `fun InjektScope.registerInjectables() { ... }`, if you prefer to be consistent with modules.  For example:
 
 ```
 class MyActivityModule: InjektScopedMain(InjektScope(DefaultRegistrar())) {
-    override fun InjektRegistrar.registerInjectables() {
+    override fun InjektScope.registerInjectables() {
         // override with local value
         addSingletonFactory { NotLazy("Freddy") }
         // import other registrations from defined modules

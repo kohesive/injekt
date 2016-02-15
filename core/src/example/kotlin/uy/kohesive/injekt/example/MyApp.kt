@@ -3,7 +3,7 @@ package uy.kohesive.injekt.example
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import uy.kohesive.injekt.*
-import uy.kohesive.injekt.api.*
+import uy.kohesive.injekt.api.InjektScope
 
 class MyApp {
     companion object : InjektMain() {
@@ -14,7 +14,7 @@ class MyApp {
 
         // the InjektModule() will call me back here on a method I override.  And all my functions for registration are
         // easy to find on the receiver class
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             // let's setup my logger first
             addLoggerFactory({ byName -> LoggerFactory.getLogger(byName) }, { byClass -> LoggerFactory.getLogger(byClass) })
 
