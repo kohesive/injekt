@@ -8,9 +8,11 @@ buildscript {
         maven {
             url 'http://oss.sonatype.org/content/repositories/snapshots'
         }
+        /* only during EAP builds
         maven {
             url 'http://dl.bintray.com/kotlin/kotlin-eap'
         }
+        */
     }
     //noinspection GroovyAssignabilityCheck
     dependencies {
@@ -72,9 +74,11 @@ subprojects {
         maven {
             url 'http://oss.sonatype.org/content/repositories/snapshots'
         }
+        /** only during EAP builds
         maven {
             url 'http://dl.bintray.com/kotlin/kotlin-eap'
         }
+        */
     }
 
     dependencies {
