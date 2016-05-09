@@ -31,11 +31,6 @@ With these changes, fewer imports need to be guessed at or needed.
 
 * Kotlin 1.0.0
 
-===
-
-2016-02-15 v1.14.0
-
-* Kotlin 1.0.0
 
 ===
 

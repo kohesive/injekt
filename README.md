@@ -249,7 +249,6 @@ For more advanced, and more automatic scope linking / delegation / inheritance, 
 * Linked Scopes, see [#31](https://github.com/kohesive/injekt/issues/31)
 * Scoped factories, see [#32](https://github.com/kohesive/injekt/issues/32)
 * Materializing object graphs without explicit calls to Injekt
-* Tell me what you would like to see, add Issues here in Github with requests.
 
 ## Recommended libraries:
 
