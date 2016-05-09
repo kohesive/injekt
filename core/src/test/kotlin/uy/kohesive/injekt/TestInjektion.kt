@@ -257,7 +257,6 @@ class DescendantThing(name: String): AncestorThing(name)
 
 data class NotExisting(val name: String)
 
-
 // === code can make common things ready for injection in the best way possible, if these were other modules or packages
 //     they have defined some importable injections:
 
