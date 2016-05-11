@@ -2,7 +2,7 @@ package uy.kohesive.injekt.example
 
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.InjektMain
-import uy.kohesive.injekt.api.*
+import uy.kohesive.injekt.api.InjektScope
 import java.text.SimpleDateFormat
 import java.util.*
 

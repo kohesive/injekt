@@ -6,9 +6,6 @@ buildscript {
         mavenCentral()
         jcenter()
         maven {
-            url 'http://repo.spring.io/plugins-release'
-        }
-        maven {
             url 'http://oss.sonatype.org/content/repositories/snapshots'
         }
         maven {
@@ -18,7 +15,6 @@ buildscript {
     //noinspection GroovyAssignabilityCheck
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
-        classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         // one day... classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.1-SNAPSHOT"
@@ -26,10 +22,9 @@ buildscript {
 }
 
 subprojects {
-    apply plugin: 'propdeps'
-    apply plugin: 'propdeps-maven'
-    apply plugin: 'propdeps-idea'
     apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
     apply plugin: 'kotlin'
 
     if (name.endsWith("jdk8")) {
@@ -83,7 +78,9 @@ subprojects {
     }
 
     dependencies {
-        provided "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
+        compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
+        testCompile "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
+        testRuntime "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
 
         testCompile "junit:junit:$version_junit"
         testCompile "org.jetbrains.kotlin:kotlin-test:$version_kotlin"

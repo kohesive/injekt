@@ -1,8 +1,9 @@
 2016-02-15 v2.0.0
 
-* Kotlin 1.0.0
+* Kotlin 1.0.1-2
 * Factory and Registry interface extensions are replicated into the InjektScope class for findability in the IDE, almost never would they be used outside due to no other registry/factory implementations.
 * BREAKING CHANGE: InjektRegistry interface is no longer used for modules, instead InjektScope.  Therefore, use of module code must change from `InjektRegistrar.registerInjectables` to `InjektScope.registerInjectables`.  An IDE intention will replace the class and import on option-enter.
+* Gradle to 2.13
 
 With these changes, fewer imports need to be guessed at or needed.
 

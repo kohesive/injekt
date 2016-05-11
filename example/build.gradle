@@ -1,0 +1,6 @@
+dependencies {
+    compile project(":injekt-api")
+    compile project(":injekt-core")
+    compile "org.slf4j:slf4j-api:$version_slf4j"
+    compile "ch.qos.logback:logback-classic:$version_logback"
+}

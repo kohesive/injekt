@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-1.0.0-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.0.1-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
 # Injekt
 
@@ -28,7 +28,7 @@ compile "uy.kohesive.injekt:injekt-core:2.0.+"
 
 ## Injekt "Main"
 
-At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the `InjektModule` on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/core/src/example/kotlin/uy/kohesive/injekt/example/MyApp.kt))
+At the earliest point in your application startup, you register singletons, factories and your logging factories.  For the simplest version of this process, you can use the `InjektModule` on an object or companion object (from [Injekt Examples](https://github.com/kohesive/injekt/blob/master/example/src/main/kotlin/uy/kohesive/injekt/example/MyApp.kt))
 
 ```kotlin
 class MyApp {
@@ -237,12 +237,11 @@ To clear a local scope, drop your reference to the scope and it will garabage co
 
 For more advanced, and more automatic scope linking / delegation / inheritance, please see issue [#31](https://github.com/kohesive/injekt/issues/31) and provide comments.  For propagating a scope into other classes injected into the class declaring the local scope, see the test case referenced from [#32](https://github.com/kohesive/injekt/issues/32)
 
-## Coming soon... (RoadMap)
+## Coming soon in 2.0... (RoadMap)
 
 * Linked Scopes, see [#31](https://github.com/kohesive/injekt/issues/31)
 * Scoped factories, see [#32](https://github.com/kohesive/injekt/issues/32)
 * Materializing object graphs without explicit calls to Injekt
-* Tell me what you would like to see, add Issues here in Github with requests.
 
 ## Recommended libraries:
 
