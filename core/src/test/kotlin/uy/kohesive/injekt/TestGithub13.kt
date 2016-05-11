@@ -3,7 +3,8 @@ package uy.kohesive.injekt.tests
 import org.junit.Test
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.InjektMain
-import uy.kohesive.injekt.api.*
+import uy.kohesive.injekt.api.InjektScope
+import uy.kohesive.injekt.api.fullType
 import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals

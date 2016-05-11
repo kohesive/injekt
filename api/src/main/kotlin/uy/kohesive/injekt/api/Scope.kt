@@ -66,35 +66,35 @@ open class InjektScope(val registrar: InjektRegistrar) : InjektRegistrar by regi
     // registry extension methods repeated here for findability
     // ===========================================================
 
-    inline fun <reified T: Any> InjektRegistry.hasFactory(): Boolean {
+    inline fun <reified T: Any> hasFactory(): Boolean {
         return hasFactory(fullType<T>())
     }
 
-    inline fun <reified T : Any> InjektRegistry.addSingleton(singleInstance: T) {
+    inline fun <reified T : Any> addSingleton(singleInstance: T) {
         addSingleton(fullType<T>(), singleInstance)
     }
 
-    inline fun <reified R: Any> InjektRegistry.addSingletonFactory(noinline factoryCalledOnce: () -> R) {
+    inline fun <reified R: Any> addSingletonFactory(noinline factoryCalledOnce: () -> R) {
         addSingletonFactory(fullType<R>(), factoryCalledOnce)
     }
 
-    inline fun <reified R: Any> InjektRegistry.addFactory(noinline factoryCalledEveryTime: () -> R) {
+    inline fun <reified R: Any> addFactory(noinline factoryCalledEveryTime: () -> R) {
         addFactory(fullType<R>(), factoryCalledEveryTime)
     }
 
-    inline fun <reified R: Any> InjektRegistry.addPerThreadFactory(noinline factoryCalledOncePerThread: () -> R) {
+    inline fun <reified R: Any> addPerThreadFactory(noinline factoryCalledOncePerThread: () -> R) {
         addPerThreadFactory(fullType<R>(), factoryCalledOncePerThread)
     }
 
-    inline fun <reified R: Any, K: Any> InjektRegistry.addPerKeyFactory(noinline factoryCalledPerKey: (K) -> R) {
+    inline fun <reified R: Any, K: Any> addPerKeyFactory(noinline factoryCalledPerKey: (K) -> R) {
         addPerKeyFactory(fullType<R>(), factoryCalledPerKey)
     }
 
-    inline fun <reified R: Any, K: Any> InjektRegistry.addPerThreadPerKeyFactory(noinline factoryCalledPerKeyPerThread: (K) -> R) {
+    inline fun <reified R: Any, K: Any> addPerThreadPerKeyFactory(noinline factoryCalledPerKeyPerThread: (K) -> R) {
         addPerThreadPerKeyFactory(fullType<R>(), factoryCalledPerKeyPerThread)
     }
 
-    inline fun <reified R: Any> InjektRegistry.addLoggerFactory(noinline factoryByName: (String) -> R, noinline factoryByClass: (Class<Any>) -> R) {
+    inline fun <reified R: Any> addLoggerFactory(noinline factoryByName: (String) -> R, noinline factoryByClass: (Class<Any>) -> R) {
         addLoggerFactory(fullType<R>(), factoryByName, factoryByClass)
     }
 

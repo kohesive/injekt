@@ -1,8 +1,10 @@
 rootProject.name = "injekt"
 
 include 'api',
-        'core'
+        'core',
+        'example'
 
 project(':api').name = 'injekt-api'
 project(':core').name = 'injekt-core'
+project(':example').name = 'injekt-example'
 
