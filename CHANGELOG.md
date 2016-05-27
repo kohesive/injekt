@@ -1,4 +1,10 @@
-2016-02-15 v2.0.0
+2016-05-27 v2.0.0-ALPHA-03
+
+* Kotlin 1.0.2
+
+===
+
+2016-05-15 v2.0.0-ALPHA-01
 
 * Kotlin 1.0.1-2
 * Factory and Registry interface extensions are replicated into the InjektScope class for findability in the IDE, almost never would they be used outside due to no other registry/factory implementations.

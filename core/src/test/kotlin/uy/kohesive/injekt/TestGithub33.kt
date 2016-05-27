@@ -1,11 +1,7 @@
 package uy.kohesive.injekt
 
-
 import org.junit.Test
-import uy.kohesive.injekt.api.InjektRegistrar
-import uy.kohesive.injekt.api.addSingleton
-import uy.kohesive.injekt.api.addSingletonFactory
-import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.api.InjektScope
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
@@ -17,7 +13,7 @@ class TestGithub33 {
     data class OtherState(val id: String)
 
     companion object : InjektMain() {
-        override fun InjektRegistrar.registerInjectables() {
+        override fun InjektScope.registerInjectables() {
             addSingleton(Store(ApplicationState("as1"), ObjType1("ot1")))
             addSingleton(Store(ApplicationState("as2"), ObjType2("ot2")))
             addSingleton(Store(OtherState("os1"), ObjType1("ot1")))
