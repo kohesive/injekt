@@ -1,13 +1,15 @@
 package uy.kohesive.injekt
 
+import org.junit.Before
 import org.junit.Test
+import uy.kohesive.injekt.registry.default.DefaultRegistrar
 import kotlin.test.assertEquals
 
 class TestGuthub35 {
 
-    @Test fun testInjectFunctionType() {
+    @Before fun prepareTest() {
         Injekt.addSingletonFactory {
-            val function: (Int) -> Int = { value -> value + 1 }
+            val function: (value: Int) -> Int = { value -> value + 1 }
             function
         }
 
@@ -21,6 +23,13 @@ class TestGuthub35 {
             function
         }
 
+        Injekt.addSingletonFactory {
+            val function: (Int) -> Int = { value -> value + 20 }
+            Int1Action(function)
+        }
+    }
+
+    @Test fun testInjectFunctionType() {
         val intFunction: (Int) -> Int = Injekt.get()
         assertEquals(3, intFunction(2))
 
@@ -36,12 +45,18 @@ class TestGuthub35 {
     }
 
     @Test fun testInjectFunctionWrapper() {
-        Injekt.addSingletonFactory {
-            val function: (Int) -> Int = { value -> value + 20 }
-            Int1Action(function)
-        }
-
         val action: Int1Action = Injekt.get()
         assertEquals(22, action(2))
+    }
+
+    class MyThing {
+        val action1: (Int) -> Int by injectLazy()
+        val action2: Int1Action by injectLazy()
+    }
+
+    @Test fun testInjectFunctionByDelegates() {
+        val thing = MyThing()
+        assertEquals(3, thing.action1(2))
+        assertEquals(22, thing.action2(2))
     }
 }
