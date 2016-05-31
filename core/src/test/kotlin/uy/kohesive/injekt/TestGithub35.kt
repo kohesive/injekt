@@ -11,8 +11,24 @@ class TestGuthub35 {
             function
         }
 
-        val function: (Int) -> Int = Injekt.get()
-        assertEquals(3, function(2))
+        Injekt.addSingletonFactory {
+            val function: (Long) -> Long = { value -> value - 1 }
+            function
+        }
+
+        Injekt.addSingletonFactory {
+            val function: (Long) -> String = { value -> "The long is $value" }
+            function
+        }
+
+        val intFunction: (Int) -> Int = Injekt.get()
+        assertEquals(3, intFunction(2))
+
+        val longFunction: (Long) -> Long = Injekt.get()
+        assertEquals(1, longFunction(2))
+
+        val longStringFunction: (Long) -> String = Injekt.get()
+        assertEquals("The long is 10", longStringFunction(10))
     }
 
     class Int1Action(val function: (Int) -> Int) {
