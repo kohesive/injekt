@@ -1,5 +1,11 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.0.2-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
+# Notice:  Kodein and Injekt, much of the same
+
+Since Injekt and Kodein both ended up in a very similar implementation (object registry approach to injection), it makes little sense in having two flavours of the same library for Kotlin.  Therefore Injekt is deferring to Kodein.  Since Injekt has no known bugs, there is no fear in continuing to use it (and I will fix anyting that shows up), but for additional functionality see Kodein instead.
+
+Kodein:  https://github.com/SalomonBrys/Kodein
+
 # Injekt
 
 Injekt gives you crazy easy **Dependency Injection** in Kotlin.  Although you can probably use it in other JVM languages if you are feeling lucky.
