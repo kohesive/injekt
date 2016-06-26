@@ -19,12 +19,12 @@ Injekt.addSingletonFactory { PeopleService() }
 Injekt.addFactory { ComplexParser.loadFromConfig("some/path/parsing.conf") }
 ```
 
-Where people service has default value for constructor parameter that receives the value from Injekt:
+Where `PeopleService` has default value for constructor parameter that receives the value from Injekt:
 ```kotlin
 class PeopleService(db: DataSource = Injekt.get()) { ... }
 ```
 
-THen you can inject `PeopleService` into your code whenever you want to use it:
+Then you can inject `PeopleService` into your code whenever you want to use it:
 
 ```kotlin
 class PeopleController {
