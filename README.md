@@ -8,7 +8,66 @@ Injekt is NOT inversion of control.  It is NOT some mystical class file manipula
 
 Injekt can also load, bind to objects, and inject configuration using Typesafe Config.  Read more in the [injekt-config-typesafe module](https://github.com/kohesive/klutter/tree/master/config-typesafe).
 
-## Maven Dependnecy
+## Quick Samples
+
+Simply register singletons (non-lazy), or factories (lazy) and then inject that values either directly or using Kotlin delegates.  For example:
+
+Early in your program (for modules see [Injekt "Main"](#injekt-main) and [Packaged Injektables](#packaged-injektables) below):
+```kotlin
+Injekt.addSingleton(HikariDataSource(HikariConfig("some/path/hikari.properties")) as DataSource)
+Injekt.addSingletonFactory { PeopleService() }
+Injekt.addFactory { ComplexParser.loadFromConfig("some/path/parsing.conf") }
+```
+
+Where people service has default value for constructor parameter that receives the value from Injekt:
+```kotlin
+class PeopleService(db: DataSource = Injekt.get()) { ... }
+```
+
+THen you can inject `PeopleService` into your code whenever you want to use it:
+
+```kotlin
+class PeopleController {
+    fun putPerson(person: Person) {
+        val peopelSrv: PeopleService = Injekt.get()
+        // ...
+    }
+}
+```
+
+And when injecting into a property you can use the same style, or instead use delegates:
+
+```kotlin
+class PeopleController {
+    val peopelSrv: PeopleService by injectLazy() // or injectValue() if immediate
+    
+    fun putPerson(person: Person) {
+        // ...
+    }
+}
+```
+
+Since `PeopleService` uses default values in the constructor, you can easily override in tests without requiring an injection model:
+```kotlin
+class TestPeopleService {
+    companion object {
+        lateinit var db: DataSource
+
+        @JvmStatic @BeforeClass fun setupTests() {
+            db = HikariDataSource(HikariConfig().apply {
+                jdbcUrl = "jdbc:h2:mem:test"
+            })
+        }
+    }
+
+    fun testPeopleService() {
+        val people = PeopleService(db) // no injection required
+        // ...
+    }
+}
+```
+
+## Gradle / Maven Dependnecy
 
 Include the dependency in your Gradle / Maven projects, ones that have Kotlin configured for Kotlin 1.0
 
