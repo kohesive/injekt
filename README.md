@@ -2,7 +2,7 @@
 
 # Notice:  Kodein and Injekt, much of the same
 
-Since Injekt and Kodein both ended up in a very similar implementation (object registry approach to injection), it makes little sense in having two flavours of the same library for Kotlin.  Therefore Injekt is deferring to Kodein.  Since Injekt has no known bugs, there is no fear in continuing to use it (and I will fix anyting that shows up), but for additional functionality see Kodein instead.  
+Since Injekt and Kodein both ended up in a very similar implementation (object registry approach to injection), it makes little sense in having two flavours of the same library for Kotlin.  Therefore Injekt is deferring to Kodein.  Since Injekt has no known bugs, there is no fear in continuing to use it (and I will fix anything that shows up), but for additional functionality see Kodein instead.  
 
 Libraries such as Klutter will create Kodein modules for their injection modules, same for Kovert.  And Typesafe configuration injection from Klutter will also be ported over to Kodein for future releases.
 
