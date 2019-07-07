@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-1.0.2-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
+[![Financial Contributors on Open Collective](https://opencollective.com/kohesive/all/badge.svg?label=financial+contributors)](https://opencollective.com/kohesive) [![Kotlin](https://img.shields.io/badge/kotlin-1.0.2-blue.svg)](http://kotlinlang.org) [![Maven Version](https://img.shields.io/maven-central/v/uy.kohesive.injekt/injekt-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22uy.kohesive.injekt%22) [![CircleCI branch](https://img.shields.io/circleci/project/kohesive/injekt/master.svg)](https://circleci.com/gh/kohesive/injekt/tree/master) [![Issues](https://img.shields.io/github/issues/kohesive/injekt.svg)](https://github.com/kohesive/injekt/issues?q=is%3Aopen) [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/kohesive/injekt/blob/master/LICENSE) [![Kotlin Slack](https://img.shields.io/badge/chat-kotlin%20slack-orange.svg)](http://kotlinslackin.herokuapp.com)
 
 # Notice:  Kodein and Injekt, much of the same
 
@@ -332,3 +332,33 @@ Other libraries that we recommend a building blocks for Kotlin applications:
 
 
 
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/kohesive/injekt/graphs/contributors"><img src="https://opencollective.com/kohesive/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/kohesive/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/kohesive"><img src="https://opencollective.com/kohesive/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/kohesive/contribute)]
+
+<a href="https://opencollective.com/kohesive/organization/0/website"><img src="https://opencollective.com/kohesive/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/1/website"><img src="https://opencollective.com/kohesive/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/2/website"><img src="https://opencollective.com/kohesive/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/3/website"><img src="https://opencollective.com/kohesive/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/4/website"><img src="https://opencollective.com/kohesive/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/5/website"><img src="https://opencollective.com/kohesive/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/6/website"><img src="https://opencollective.com/kohesive/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/7/website"><img src="https://opencollective.com/kohesive/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/8/website"><img src="https://opencollective.com/kohesive/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/kohesive/organization/9/website"><img src="https://opencollective.com/kohesive/organization/9/avatar.svg"></a>
