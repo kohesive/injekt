@@ -6,7 +6,7 @@ Since Injekt and Kodein both ended up in a very similar implementation (object r
 
 Libraries such as Klutter will create Kodein modules for their injection modules, same for Kovert.  And Typesafe configuration injection from Klutter will also be ported over to Kodein for future releases.
 
-Kodein:  https://github.com/SalomonBrys/Kodein
+Kodein:  https://github.com/Kodein-Framework/Kodein-DI/
 
 # Injekt
 
